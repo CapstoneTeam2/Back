@@ -22,6 +22,11 @@ public class DB_Controller {
     @Autowired
     private DB_Service db_service;
 
+    @GetMapping("/Private_Station_get")
+    public List<PrivateStation> privateStations() {return db_service.privateStationGet();}
+
+    @GetMapping("/All_Station_get")
+    public List<Object> allStation() {return db_service.findAllBychgerType();}
 
     @GetMapping("/Public_Station_get")
     public List<PublicStation> publicStation(){
@@ -47,8 +52,10 @@ public class DB_Controller {
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonArray1 = (JSONObject) jsonArray.get(i);
             PublicStation publicStation = new PublicStation();
-
+            if(jsonArray1.get("chgerId").equals("02"))
+                continue;
             publicStation.setPublicStatKey(i);
+            //publicStation.setAddr(jsonArray1.get("addr").toString());
             publicStation.setAddr(jsonArray1.get("addr").toString());
             publicStation.setBnm(jsonArray1.get("bnm").toString());
             publicStation.setChgerId(jsonArray1.get("chgerId").toString());
@@ -62,7 +69,7 @@ public class DB_Controller {
             publicStation.setUseTime(jsonArray1.get("useTime").toString());
             publicStation.setStat(jsonArray1.get("stat").toString());
             publicStation.setStatUpdDt(jsonArray1.get("statUpdDt").toString());
-
+            System.out.println(jsonArray1.get("addr").toString());
             //publicStation.setAddr(jsonArray1.get("addr").toString());
             db_service.insertDB(publicStation);
         }
@@ -99,7 +106,8 @@ public class DB_Controller {
 
     @PostMapping("/Register_Station")
     public String Register_Station(@RequestBody PrivateStation privateStation){
-        db_service.insertDB(privateStation);
+        System.out.println(privateStation.getAddr());
+        db_service.insertDB_private(privateStation);
         return "개인 충전기 등록";
     }
 }

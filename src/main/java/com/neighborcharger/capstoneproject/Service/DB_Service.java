@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,7 +23,7 @@ public class DB_Service {
     }
 
     @Transactional
-    public void insertDB(PrivateStation privateStation) {
+    public void insertDB_private(PrivateStation privateStation) {
         db_repository_private.save(privateStation);
     }
 
@@ -32,6 +33,26 @@ public class DB_Service {
 
         return publicStationList;
     }
+    @Transactional
+    public List<PrivateStation> privateStationGet(){
+        List<PrivateStation> privateStations  = db_repository_private.findAll();
+
+        return privateStations;
+    }
+
+    @Transactional
+    public List<Object> findAllBychgerType() {
+        List<Object> resultList = new ArrayList<>();
+
+        List<PublicStation> publicStations = db_repository.findAll();
+        resultList.addAll(publicStations);
+
+        List<PrivateStation> privateStations = db_repository_private.findAll();
+        resultList.addAll(privateStations);
+
+        return resultList;
+    }
+
     @Transactional
     public List<PublicStation> publicStationList(String chgerType) {
         List<PublicStation> publicStationList  = db_repository.findAllBychgerType(chgerType);

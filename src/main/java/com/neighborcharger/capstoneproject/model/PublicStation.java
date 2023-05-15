@@ -19,19 +19,19 @@ public class PublicStation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int publicStatKey;
 
-    @Column(length = 20)
+    @Column
     private String statNM; //충전소명
 
-    @Column(length = 80)
+    @Column
     private String chgerId; //충전기 ID
 
-    @Column(length = 20)
+    @Column
     private String chgerType; // 충전기 타입
 
-    @Column(length = 30)
+    @Column
     private String addr; // 주소
 
-    @Column(length = 30)
+    @Column
     private String useTime; //사용가능시간
 
     @Column(length = 10)

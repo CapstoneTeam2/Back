@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,48 +21,49 @@ public class PrivateStation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long privateStatKey;
 
-    @Column(length = 20)
+    @Column
     private String statNM; //충전소명
 
-    @Column(length = 10)
-    private String ownerName; // 충전소 소유자명
+    @Column
+    private String ownerName; // 충전소 소유자/대표자명
 
-    @Column(length = 2)
+    @Column
     private String chgerType; // 충전기 타입
 
-    @Column(length = 10)
-    private double price; // 1kWh 기준 충전 가격
+    @Column
+    private String price; // 1kWh 기준 충전 가격
 
-    @Column(length = 30)
+    @Column
     private String addr; // 주소
 
-    @Column(length = 10)
-    private String lat; //위도
+    @Column
+    private String OpenDate;
 
-    @Column(length = 10)
-    private String lng; //경도
+    @Column
+    private String Business_registration_number;
 
-    @Column(length = 30)
+    @Column
     private String useTime; //사용가능시간
 
-    @Column(length = 5)
-    private boolean reserved;
+    @Column
+    private String reserved;
 
-    @Column(length = 1)
+    @Column
     private String stat; // 충전기 상태
 
-    @Column(length = 14)
+    @Column
     private String statUpdDt; // 상태 갱신 일시
 
-    @Column(length = 14)
+    @Column
     private String nowTsdt; //충전중 시작일시
 
-    @Column(length = 3)
+    @Column
     private String output; // 충전용량
 
-    @Column(length = 2)
-    private String method; //충전방식
+    @Column
+    private String method; //충전방식,타입
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User owner;
+    @Column
+    @OneToMany
+    private List<Reservation_info> reservations = new ArrayList<>();
 }
