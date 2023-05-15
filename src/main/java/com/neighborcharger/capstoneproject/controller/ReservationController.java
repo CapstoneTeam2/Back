@@ -51,6 +51,6 @@ public class ReservationController {
             firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 거절되었어요");
             // 지금 예약 삭제
         }
-        return "수락/ 거절 응답 완료";
+        return "수락/ 거절 응답 완료 ";
     }
 }
