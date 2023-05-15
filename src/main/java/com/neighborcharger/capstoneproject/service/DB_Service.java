@@ -1,7 +1,7 @@
-package com.neighborcharger.capstoneproject.Service;
+package com.neighborcharger.capstoneproject.service;
 
-import com.neighborcharger.capstoneproject.Repository.DB_Repository;
-import com.neighborcharger.capstoneproject.Repository.DB_Repository_private;
+import com.neighborcharger.capstoneproject.repository.DB_Repository;
+import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.PublicStation;
 import org.springframework.beans.factory.annotation.Autowired;
