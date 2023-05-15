@@ -1,10 +1,9 @@
 package com.neighborcharger.capstoneproject.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.neighborcharger.capstoneproject.Service.DB_Service;
+import com.neighborcharger.capstoneproject.service.DB_Service;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.PublicStation;
-import org.apache.tomcat.util.json.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

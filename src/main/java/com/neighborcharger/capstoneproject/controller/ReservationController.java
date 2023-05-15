@@ -1,8 +1,8 @@
 package com.neighborcharger.capstoneproject.controller;
 
 import com.neighborcharger.capstoneproject.DTO.Respone_DTO;
-import com.neighborcharger.capstoneproject.Service.FirebaseCloudMessage_Service;
-import com.neighborcharger.capstoneproject.Service.Reservation_Service;
+import com.neighborcharger.capstoneproject.service.FirebaseCloudMessage_Service;
+import com.neighborcharger.capstoneproject.service.Reservation_Service;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
