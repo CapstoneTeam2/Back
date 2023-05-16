@@ -1,11 +1,9 @@
-package com.neighborcharger.capstoneproject.Repository;
+package com.neighborcharger.capstoneproject.repository;
 
 import com.neighborcharger.capstoneproject.model.PrivateStation;
-import com.neighborcharger.capstoneproject.model.PublicStation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository

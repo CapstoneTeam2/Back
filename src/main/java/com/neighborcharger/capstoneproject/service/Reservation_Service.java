@@ -1,14 +1,11 @@
-package com.neighborcharger.capstoneproject.Service;
+package com.neighborcharger.capstoneproject.service;
 
-import com.neighborcharger.capstoneproject.Repository.DB_Repository_private;
-import com.neighborcharger.capstoneproject.Repository.Reservation_Repository;
-import com.neighborcharger.capstoneproject.controller.ReservationController;
+import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
+import com.neighborcharger.capstoneproject.repository.Reservation_Repository;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class Reservation_Service {
