@@ -1,0 +1,82 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://neighborcharger.cmobwlvkrcpm.ap-northeast-2.rds.amazonaws.com:3306/neighborcharger?serverTimezone=Asia/Seoul
+    #    url: jdbc:mysql://localhost:3306/team?serverTimezone=Asia/Seoul
+    #    username: cho
+    #    password: hee6455
+    username : admin
+    password : team2nc!
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  servlet:
+    multipart:
+      maxFileSize: 25MB
+      maxRequestSize: 25MB
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+
+  freemarker:
+    cache: false
+
+  redis:
+    #      host: localhost
+    host: 127.0.0.1
+    port: 6379
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 871696133118-fpkej9ouok43iqt04u763qnv27sbat2d.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+
+jwt:
+  secret: 35f7588721311c8f6d2123193e1c5c039eb4ef206cd38e06dec07d4caa021fee0ac5e4f876aa5b95e6075a330eb987e1bbb7180a9357745dc6aaa3539bafe65f
+  # 35f7588721311c8f6d2123193e1c5c039eb4ef206cd38e06dec07d4caa021fee0ac5e4f876aa5b95e6075a330eb987e1bbb7180a9357745dc6aaa3539bafe65f
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIA4YNZQ5C4GCYAVDG3 # AKIA4YNZQ5C4GCYAVDG3
+      secretKey: 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 # vJreApsXw6dTaJw9SI6fEYqTiuJO706QiH3URS8b
+
+    s3:
+      bucket: neighborcharger-bucket
+    region:
+      static: ap-northeast-2
+
+    stack:
+      auto: false
