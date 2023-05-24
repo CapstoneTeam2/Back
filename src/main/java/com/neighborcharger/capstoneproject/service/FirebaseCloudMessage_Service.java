@@ -18,11 +18,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Builder
 public class FirebaseCloudMessage_Service {
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/fcm-server-b7e93/messages:send";
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/capstoenteam2/messages:send";
+    // "https://fcm.googleapis.com/v1/projects/fcm-server-b7e93/messages:send";
     private final ObjectMapper objectMapper;
 
-    public void sendMessageTo(String targetToken, String title, String body, String returnToken, String startTime, String endTime) throws IOException {
-        String message = makeMessage(targetToken, title, body, returnToken, startTime, endTime);
+    public void sendMessageTo(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking) throws IOException {
+        String message = makeMessage(targetToken, title, body, returnToken, startTime, endTime, checking);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
@@ -38,7 +39,7 @@ public class FirebaseCloudMessage_Service {
 
         System.out.println(response.body().string());
     }
-    private String makeMessage(String targetToken, String title, String body, String returnToken, String startTime, String endTime) throws JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking) throws JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
@@ -52,6 +53,7 @@ public class FirebaseCloudMessage_Service {
                                         .returnToken(returnToken)
                                         .startTime(startTime)
                                         .endTime(endTime)
+                                        .checking(checking)
                                         .build()
                         )
                         .build()
@@ -61,8 +63,8 @@ public class FirebaseCloudMessage_Service {
         return objectMapper.writeValueAsString(fcmMessage);
     }
 
-    public void sendMessageTo2(String targetToken, String title, String body) throws IOException {
-        String message = makeMessage2(targetToken, title, body);
+    public void sendMessageTo2(String targetToken, String title, String body, String checking) throws IOException {
+        String message = makeMessage2(targetToken, title, body, checking);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
@@ -79,7 +81,7 @@ public class FirebaseCloudMessage_Service {
         System.out.println(response.body().string());
     }
 
-    private String makeMessage2(String targetToken, String title, String body) throws JsonProcessingException {
+    private String makeMessage2(String targetToken, String title, String body, String checking) throws JsonProcessingException {
         FcmResponesMessage fcmMessage = FcmResponesMessage.builder()
                 .message(FcmResponesMessage.Message.builder()
                         .token(targetToken)
@@ -88,6 +90,10 @@ public class FirebaseCloudMessage_Service {
                                 .body(body)
                                 .image(null)
                                 .build()
+                        ).data(
+                                FcmResponesMessage.Data.builder()
+                                        .checking(checking)
+                                        .build()
                         )
                         .build()
                 )
@@ -97,7 +103,8 @@ public class FirebaseCloudMessage_Service {
     }
 
     public String getAccessToken() throws IOException {
-        String firebaseConfigPath = "firebase/fcm-server-b7e93-firebase-adminsdk-76g95-ae1f10b55b.json";
+        String firebaseConfigPath = "firebase/capstoenteam2-firebase-adminsdk-dn63g-55a95679b3.json";
+                //"firebase/fcm-server-b7e93-firebase-adminsdk-76g95-ae1f10b55b.json";
 
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())

@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,7 +18,7 @@ import java.util.List;
 public class PrivateStation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long privateStatKey;
+    private int privateStatKey;
 
     @Column
     private String statNM; //충전소명
@@ -62,6 +61,15 @@ public class PrivateStation {
 
     @Column
     private String method; //충전방식,타입
+
+    @Column
+    private String firebaseToken;
+
+    @Column
+    private String note;
+
+    @Column
+    private String component;
 
     @Column
     @OneToMany

@@ -39,8 +39,8 @@ public class UserEntity {
     @Column
     private String password;
 
-    @Column(name = "kakao_id")
-    private long kakaoIdx;
+//    @Column(name = "kakao_id")
+//    private long kakaoIdx;
 
     @Column(name = "firebase_token")
     private String firebaseToken;
@@ -60,12 +60,14 @@ public class UserEntity {
     }
 
     public UserEntity(String nickname, String carType,
-                      String chgerType, String id, String password) {
+                      String chgerType, String id, String password, String firebaseToken) {
         this.nickname = nickname;
         this.carType = carType;
         this.chgerType = chgerType;
         this.id = id;
         this.password = password;
+        this.firebaseToken = firebaseToken;
+        //this.kakaoIdx = 0;
     }
 
     //카카오 로그인 시
@@ -76,7 +78,7 @@ public class UserEntity {
         this.carType = carType;
         this.chgerType = chgerType;
         this.isBusiness = isBusiness;
-        this.kakaoIdx = kakaoIdx;
+        //this.kakaoIdx = kakaoIdx;
     }
 
     public UserEntity(String nickname, String carType,
@@ -84,7 +86,7 @@ public class UserEntity {
         this.nickname = nickname;
         this.carType = carType;
         this.chgerType = chgerType;
-        this.kakaoIdx = kakaoIdx;
+        //this.kakaoIdx = kakaoIdx;
     }
 }
 

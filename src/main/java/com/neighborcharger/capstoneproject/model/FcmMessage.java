@@ -41,5 +41,6 @@ public class FcmMessage {
                 private String    returnToken;
                 private String    startTime;
                 private String    endTime;
+                private String    checking;
         }
 }

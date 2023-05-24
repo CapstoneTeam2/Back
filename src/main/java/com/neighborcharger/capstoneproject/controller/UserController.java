@@ -20,52 +20,52 @@ import static com.neighborcharger.capstoneproject.model.base.BaseResponseStatus.
 public class UserController {
 
     private final UserService userService;
-    private final KakaoService kakaoService;
+    //private final KakaoService kakaoService;
 
-    public UserController(UserService userService, KakaoService kakaoService) {
+    public UserController(UserService userService){ //, KakaoService kakaoService) {
         this.userService = userService;
-        this.kakaoService = kakaoService;
+       // this.kakaoService = kakaoService;
     }
 
 
-    @PostMapping("/signUp")
-    public BaseResponse<CreateUserResDTO> createUser(@RequestBody CreateUserReqDTO createUserReqDTO) {
-        try {
-            //사용자 생성
-            long kakaoIdx = kakaoService.checkKakaoUser(createUserReqDTO.getAccessToken());
-            KakaoMemberCheckResDTO kakaoMemberCheckResDTO = userService.checkKakaoMember(kakaoIdx);
-            if (kakaoMemberCheckResDTO.getIsMember() == true) {
-                return new BaseResponse<>(SIGNUP_ALREADY_EXIST_KAKAO_MEMBER);
-            }
+//    @PostMapping("/signUp")
+//    public BaseResponse<CreateUserResDTO> createUser(@RequestBody CreateUserReqDTO createUserReqDTO) {
+//        try {
+//            //사용자 생성
+//            long kakaoIdx = kakaoService.checkKakaoUser(createUserReqDTO.getAccessToken());
+//            KakaoMemberCheckResDTO kakaoMemberCheckResDTO = userService.checkKakaoMember(kakaoIdx);
+//            if (kakaoMemberCheckResDTO.getIsMember() == true) {
+//                return new BaseResponse<>(SIGNUP_ALREADY_EXIST_KAKAO_MEMBER);
+//            }
+//
+//            if (kakaoIdx != 0) {
+//                CreateUserResDTO result = userService.createUser(createUserReqDTO, kakaoIdx);
+//                return new BaseResponse<>(result);
+//            } else {
+//                return new BaseResponse<>(INVALID_ACCESS_KAKAO);
+//            }
+//
+//        } catch (BaseException e) {
+//            log.error(" API : api/signup" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+//            return new BaseResponse<>(e.getStatus());
+//        }
+//    }
 
-            if (kakaoIdx != 0) {
-                CreateUserResDTO result = userService.createUser(createUserReqDTO, kakaoIdx);
-                return new BaseResponse<>(result);
-            } else {
-                return new BaseResponse<>(INVALID_ACCESS_KAKAO);
-            }
 
-        } catch (BaseException e) {
-            log.error(" API : api/signup" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
-            return new BaseResponse<>(e.getStatus());
-        }
-    }
-
-
-    @PostMapping("/login")
-    public BaseResponse<LoginResDTO> login(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO) throws BaseException {
-        try{
-            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
-            LoginResDTO result = userService.loginUser(kakaoIdx);
-            log.info(" API : api/login 호출 \n" + "카카오 로그인 할거면 나한테 연락하라 했는데 안하고 하는 사람들!");
-            return new BaseResponse<>(result);
-
-        }catch (BaseException e){
-            log.error(" API : api/login" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
-            return new BaseResponse<>(e.getStatus());
-        }
-    }
-
+//    @PostMapping("/login")
+//    public BaseResponse<LoginResDTO> login(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO) throws BaseException {
+//        try{
+//            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
+//            LoginResDTO result = userService.loginUser(kakaoIdx);
+//            log.info(" API : api/login 호출 \n" + "카카오 로그인 할거면 나한테 연락하라 했는데 안하고 하는 사람들!");
+//            return new BaseResponse<>(result);
+//
+//        }catch (BaseException e){
+//            log.error(" API : api/login" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+//            return new BaseResponse<>(e.getStatus());
+//        }
+//    }
+//
 
     //id-pw 방식으로 회원가입 및 로그인
     @PostMapping("/signUp-id")
@@ -117,21 +117,21 @@ public class UserController {
         }
     }
 
-    @PostMapping("/userCheck")
-    public BaseResponse<KakaoMemberCheckResDTO> userCheck(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO){
-        try{
-            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
-            if(kakaoIdx != 0 ){
-                KakaoMemberCheckResDTO result = userService.checkKakaoMember(kakaoIdx);
-                return new BaseResponse<>(result);
-            }else {
-                return new BaseResponse<>(INVALID_ACCESS_KAKAO);
-            }
-        }catch (BaseException e){
-            log.error(" API : api/userCheck" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
-            return new BaseResponse<>(e.getStatus());
-        }
-    }
+//    @PostMapping("/userCheck")
+//    public BaseResponse<KakaoMemberCheckResDTO> userCheck(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO){
+//        try{
+//            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
+//            if(kakaoIdx != 0 ){
+//                KakaoMemberCheckResDTO result = userService.checkKakaoMember(kakaoIdx);
+//                return new BaseResponse<>(result);
+//            }else {
+//                return new BaseResponse<>(INVALID_ACCESS_KAKAO);
+//            }
+//        }catch (BaseException e){
+//            log.error(" API : api/userCheck" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+//            return new BaseResponse<>(e.getStatus());
+//        }
+//    }
 
     @GetMapping("/nickname/dupli")
     public BaseResponse<CheckNicknameResDTO> checkNickname(@RequestParam("nickname") String nickname) {
@@ -157,6 +157,9 @@ public class UserController {
         }
 
     }
-
+    @GetMapping("/get/{id}")
+    public  UserEntity userEntity(@PathVariable String id){
+        return userService.User_get(id);
+    }
 }
 

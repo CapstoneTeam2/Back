@@ -9,4 +9,8 @@ import java.util.Optional;
 @Repository
 public interface DB_Repository_private extends JpaRepository<PrivateStation, Integer> {
     Optional<PrivateStation> findBystatNM(String statNM);
+    Optional<PrivateStation> findByownerName(String ownerName);
+    Optional<PrivateStation> findByfirebaseToken(String firebaseToken);
+
+
 }

@@ -1,9 +1,11 @@
 package com.neighborcharger.capstoneproject.service;
 
 
+import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.base.BaseException;
 import com.neighborcharger.capstoneproject.model.kakao.KakaoMemberCheckResDTO;
 import com.neighborcharger.capstoneproject.model.user.*;
+import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
 import com.neighborcharger.capstoneproject.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,10 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
-    @Transactional
+    @Autowired
+    ReservationUserRepository reservationUserRepository;
+
+    /*@Transactional
     public CreateUserResDTO createUser(CreateUserReqDTO createUserReqDTO, long kakaoIdx) throws BaseException{
 
         //닉네임 중복확인
@@ -62,44 +67,44 @@ public class UserService {
                 jwtRefreshToken
         );
     }
-
-    public LoginResDTO loginUser(long kakaoIdx){
-        UserLoginInfo userLoginInfo = userRepository.getUserLoginInfo(kakaoIdx);
-
-        //JWT
-        String jwtAccessToken = jwtService.createAccessToken(userLoginInfo.getUserId());
-        String jwtRefreshToken = jwtService.createRefreshToken(userLoginInfo.getUserId());
-
-        return new LoginResDTO(
-                "로그인에 성공하였습니다.",
-                userLoginInfo.getUserId(),
-                userLoginInfo.getNickname(),
-                userLoginInfo.getCarType(),
-                userLoginInfo.getChgerType(),
-                userLoginInfo.getIsBusiness(),
-                jwtAccessToken,
-                jwtRefreshToken
-        );
-    }
-
-    //DB에 같은 카카오 ID로 가입되어있는 회원이 있는지 확인
-    public KakaoMemberCheckResDTO checkKakaoMember (long kakaoIdx){
-        //DB에 Kakao ID 존재 여부 확인
-        int isKakaoMemberExisted = 0;
-
-        try{
-            isKakaoMemberExisted = userRepository.checkKakaoMember(kakaoIdx);
-        }catch (Exception e){
-            log.error(e.getMessage());
-        }
-
-        if (isKakaoMemberExisted == 0){
-            return new KakaoMemberCheckResDTO(false, "회원가입을 시작해주세요.");
-        }else{
-            return new KakaoMemberCheckResDTO(false, "이미 회원이니 로그인 해주세요.");
-        }
-    }
-
+*/
+//    public LoginResDTO loginUser(long kakaoIdx){
+//        UserLoginInfo userLoginInfo = userRepository.getUserLoginInfo(kakaoIdx);
+//
+//        //JWT
+//        String jwtAccessToken = jwtService.createAccessToken(userLoginInfo.getUserId());
+//        String jwtRefreshToken = jwtService.createRefreshToken(userLoginInfo.getUserId());
+//
+//        return new LoginResDTO(
+//                "로그인에 성공하였습니다.",
+//                userLoginInfo.getUserId(),
+//                userLoginInfo.getNickname(),
+//                userLoginInfo.getCarType(),
+//                userLoginInfo.getChgerType(),
+//                userLoginInfo.getIsBusiness(),
+//                jwtAccessToken,
+//                jwtRefreshToken
+//        );
+//    }
+//
+//    //DB에 같은 카카오 ID로 가입되어있는 회원이 있는지 확인
+//    public KakaoMemberCheckResDTO checkKakaoMember (long kakaoIdx){
+//        //DB에 Kakao ID 존재 여부 확인
+//        int isKakaoMemberExisted = 0;
+//
+//        try{
+//            isKakaoMemberExisted = userRepository.checkKakaoMember(kakaoIdx);
+//        }catch (Exception e){
+//            log.error(e.getMessage());
+//        }
+//
+//        if (isKakaoMemberExisted == 0){
+//            return new KakaoMemberCheckResDTO(false, "회원가입을 시작해주세요.");
+//        }else{
+//            return new KakaoMemberCheckResDTO(false, "이미 회원이니 로그인 해주세요.");
+//        }
+//    }
+//
 
     // 사용자 생성
     @Transactional
@@ -114,7 +119,8 @@ public class UserService {
                 createIdUserReqDTO.getCarType(),
                 createIdUserReqDTO.getChgerType(),
                 createIdUserReqDTO.getId(),
-                createIdUserReqDTO.getPassword()
+                createIdUserReqDTO.getPassword(),
+                createIdUserReqDTO.getFirebaseToken()
         );
 
 
@@ -130,6 +136,7 @@ public class UserService {
                 createIdUserReqDTO.getNickname(),
                 createIdUserReqDTO.getCarType(),
                 createIdUserReqDTO.getChgerType(),
+                createIdUserReqDTO.getFirebaseToken(),
                 "N",
                 jwtAccessToken,
                 jwtRefreshToken
@@ -213,8 +220,11 @@ public class UserService {
 
         }
     }
-
-
-
-
+    @Transactional
+    public UserEntity User_get(String id){
+        UserEntity userEntity = reservationUserRepository.findByid(id).orElseGet(()->{
+            return new UserEntity();
+        });
+        return userEntity;
+    }
 }

@@ -34,7 +34,7 @@ public class PublicStation {
     @Column
     private String useTime; //사용가능시간
 
-    @Column(length = 10)
+    @Column(length = 30)
     private String bnm; // 기관명
 
     @Column(length = 10)
@@ -63,4 +63,7 @@ public class PublicStation {
 
     @Column(length = 200)
     private String note; //충전소 안내사항
+
+    @Column
+    private String component;
 }

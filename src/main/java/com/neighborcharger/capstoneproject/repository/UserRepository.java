@@ -23,31 +23,32 @@ public class UserRepository {
 
     private JdbcTemplate jdbcTemplate;
 
-    public int createUser(UserEntity userEntity){
-        //User 테이블에 데이터 추가
-        String createUserQuery = "insert into User(nickname, car_type, chger_type, kakao_id) values(?,?,?,?)";
-        Object[] createUserParams = new Object[]{
-                userEntity.getNickname(),
-                userEntity.getCarType(),
-                userEntity.getChgerType(),
-                userEntity.getKakaoIdx()
-        };
-        this.jdbcTemplate.update(createUserQuery, createUserParams);
-
-        //userIdx 반환
-        String lastInsertUserIdxQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertUserIdxQuery, int.class);
-    }
+//    public int createUser(UserEntity userEntity){
+//        //User 테이블에 데이터 추가
+//        String createUserQuery = "insert into User(nickname, car_type, chger_type, kakao_id) values(?,?,?,?)";
+//        Object[] createUserParams = new Object[]{
+//                userEntity.getNickname(),
+//                userEntity.getCarType(),
+//                userEntity.getChgerType(),
+//                userEntity.getKakaoIdx()
+//        };
+//        this.jdbcTemplate.update(createUserQuery, createUserParams);
+//
+//        //userIdx 반환
+//        String lastInsertUserIdxQuery = "select last_insert_id()";
+//        return this.jdbcTemplate.queryForObject(lastInsertUserIdxQuery, int.class);
+//    }
 
     public int createIdUser(UserEntity userEntity){
         //User 테이블에 데이터 추가
-        String createUserQuery = "insert into User(nickname, car_type, chger_type, id, password) values(?,?,?,?,?)";
+        String createUserQuery = "insert into User(nickname, car_type, chger_type, id, password, firebase_token) values(?,?,?,?,?,?)";
         Object[] createUserParams = new Object[]{
                 userEntity.getNickname(),
                 userEntity.getCarType(),
                 userEntity.getChgerType(),
                 userEntity.getId(),
                 userEntity.getPassword(),
+                userEntity.getFirebaseToken()
         };
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
@@ -82,35 +83,35 @@ public class UserRepository {
                 checkIdParam);
     }
 
-    public int checkKakaoMember(long kakaoIdx) {
-        String checkKakaoMemberQuery = "select exists(select kakao_id from User where kakao_id=?)";
-        long checkKakaoMemberParam = kakaoIdx;
-        return this.jdbcTemplate.queryForObject(
-                checkKakaoMemberQuery,
-                int.class,
-                checkKakaoMemberParam);
-    }
-
-    public UserLoginInfo getUserLoginInfo(long kakaoIdx) {
-        String userLoginInfoQuery =
-                "select u.user_id, u.nickname, u.car_type, u.chger_type, u.is_business\n" +
-                        "from User u \n" +
-                        "where u.kakao_id = ?";
-
-        try {
-            return this.jdbcTemplate.queryForObject(userLoginInfoQuery,
-                    (rs, row) -> new UserLoginInfo(
-                            rs.getInt("user_id"),
-                            rs.getString("nickname"),
-                            rs.getString("car_type"),
-                            rs.getString("chger_type"),
-                            rs.getString("is_business")
-                    ),
-                    kakaoIdx);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
+//    public int checkKakaoMember(long kakaoIdx) {
+//        String checkKakaoMemberQuery = "select exists(select kakao_id from User where kakao_id=?)";
+//        long checkKakaoMemberParam = kakaoIdx;
+//        return this.jdbcTemplate.queryForObject(
+//                checkKakaoMemberQuery,
+//                int.class,
+//                checkKakaoMemberParam);
+//    }
+//
+//    public UserLoginInfo getUserLoginInfo(long kakaoIdx) {
+//        String userLoginInfoQuery =
+//                "select u.user_id, u.nickname, u.car_type, u.chger_type, u.is_business\n" +
+//                        "from User u \n" +
+//                        "where u.kakao_id = ?";
+//
+//        try {
+//            return this.jdbcTemplate.queryForObject(userLoginInfoQuery,
+//                    (rs, row) -> new UserLoginInfo(
+//                            rs.getInt("user_id"),
+//                            rs.getString("nickname"),
+//                            rs.getString("car_type"),
+//                            rs.getString("chger_type"),
+//                            rs.getString("is_business")
+//                    ),
+//                    kakaoIdx);
+//        } catch (EmptyResultDataAccessException e) {
+//            return null;
+//        }
+//    }
 
     public UserLoginInfo getIdUserLoginInfo(String id, String password) {
         String userLoginInfoQuery =

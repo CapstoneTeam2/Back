@@ -21,4 +21,6 @@ public class CreateUserResDTO {
 
     private String jwtAccessToken;
     private String jwtRefreshToken;
+    private String firebaseToken;
+
 }

@@ -39,18 +39,23 @@ public class ReservationController {
         System.out.println(reservation_info);
 
         reservationService.Time_Reservation_service(reservation_info, reservation_info.getStatNM());
-        firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time(), reservation_info.getEnd_time());
+        //firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time(), reservation_info.getEnd_time(), "예약");
         return "시간 저장 -> 요청 보냄";
     }
 
     @PostMapping("/Reservation_Respone")
     private String Reservation_Respone(@RequestBody Respone_DTO respone_dto) throws IOException {
-        if(respone_dto.getChoice() == 1)
-            firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요");
-        else {
-            firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 거절되었어요");
-            // 지금 예약 삭제
+        if(respone_dto.getChoice() == 1) {
+            firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "응답");
         }
-        return "수락/ 거절 응답 완료 ";
+        else {
+            firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 거절되었어요", "응답");
+        }
+        return "수락/거절 응답 완료";
+    }
+    @DeleteMapping("/Delete_Reservation/{ReservationPerson}/{ownerName}") // 예약자
+    private String Delete_Reservation(@PathVariable String ReservationPerson, @PathVariable String ownerName){
+        reservationService.Reservation_Delete(ReservationPerson, ownerName);
+        return "거절을 받음";
     }
 }
