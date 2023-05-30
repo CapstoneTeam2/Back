@@ -72,6 +72,20 @@ public class PrivateStation {
     private String component;
 
     @Column
+    private int totalScore; // 나누기 전 총점
+
+    @Column
+    private int reviewCnt;
+
+    @Column
+    private float score;
+
+    @Column
     @OneToMany
     private List<Reservation_info> reservations = new ArrayList<>();
+
+    @Column
+    @OneToMany
+    private List<ReviewEntity> reviewList = new ArrayList<>();
+
 }

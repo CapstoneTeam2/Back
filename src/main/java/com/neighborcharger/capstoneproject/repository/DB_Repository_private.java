@@ -13,4 +13,5 @@ public interface DB_Repository_private extends JpaRepository<PrivateStation, Int
     Optional<PrivateStation> findByfirebaseToken(String firebaseToken);
 
 
+
 }

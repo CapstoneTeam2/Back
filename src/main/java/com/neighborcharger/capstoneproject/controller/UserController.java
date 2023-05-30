@@ -5,7 +5,7 @@ import com.neighborcharger.capstoneproject.model.base.BaseResponse;
 import com.neighborcharger.capstoneproject.model.kakao.KakaoMemberCheckResDTO;
 import com.neighborcharger.capstoneproject.model.kakao.KakaoUserValidReqDTO;
 import com.neighborcharger.capstoneproject.model.user.*;
-import com.neighborcharger.capstoneproject.service.KakaoService;
+//import com.neighborcharger.capstoneproject.service.KakaoService;
 import com.neighborcharger.capstoneproject.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;

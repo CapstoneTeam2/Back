@@ -26,9 +26,11 @@ public class Reservation_Service {
         PrivateStation privateStation = db_repository_private.findByownerName(owner).orElseGet(()->{
             return new PrivateStation();
         });
+
         Reservation_info reservation_info = reservation_repository.findByreservationperson(ReservationPerson).orElseGet(()->{
             return new Reservation_info();
         });
+
         privateStation.getReservations().remove(reservation_info);
         reservation_repository.deleteById(Math.toIntExact(reservation_info.getId()));
     }
