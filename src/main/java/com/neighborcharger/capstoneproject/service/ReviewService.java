@@ -34,21 +34,21 @@ public class ReviewService {
 
         ReviewEntity reviewEntity = new ReviewEntity( //리뷰 엔티티 등록
                 registerReviewReqDTO.getScore(),
-                registerReviewReqDTO.getReviewerFirebaseToken(),
+                registerReviewReqDTO.getReviewerNickname(),
                 registerReviewReqDTO.getText(),
-                registerReviewReqDTO.getOwnerFirebaseToken()
+                registerReviewReqDTO.getOwnerPrivateStatNM()
         );
 
         reviewRepository.save(reviewEntity);
 
-        //리뷰한 사람 토큰으로 정보 찾아내기
-        UserEntity reviewer = reservationUserRepository.findByfirebaseToken(registerReviewReqDTO.getReviewerFirebaseToken()).orElseGet(()->{
+        //리뷰한 사람 닉네임으로 정보 찾아내기
+        UserEntity reviewer = reservationUserRepository.findBynickname(registerReviewReqDTO.getReviewerNickname()).orElseGet(()->{
             return new UserEntity();
         });
 
         //해당 개인 충전소의 totalScore 변경하기
             //먼저 해당 개인 충전소 정보 가져오기
-        PrivateStation selectedPrivateStat = db_repository_private.findByfirebaseToken(registerReviewReqDTO.getOwnerFirebaseToken()).orElseGet(
+        PrivateStation selectedPrivateStat = db_repository_private.findBystatNM(registerReviewReqDTO.getOwnerPrivateStatNM()).orElseGet(
                 () -> {return new PrivateStation();});
 
         //충전소의 리뷰 리스트에 이번 리뷰 더하기
@@ -101,8 +101,8 @@ public class ReviewService {
     }
 
     @Transactional
-    public List<ReviewEntity> myReviewList(String token){
-        UserEntity userIsMe = reservationUserRepository.findByfirebaseToken(token).orElseGet(()->{
+    public List<ReviewEntity> myReviewList(String nickname){
+        UserEntity userIsMe = reservationUserRepository.findBynickname(nickname).orElseGet(()->{
             return new UserEntity();
         });
 
@@ -110,21 +110,21 @@ public class ReviewService {
     }
 
     @Transactional
-    public void deleteReview(String reviewerFirebaseToken, String ownerFirebaseToken) {   // 리뷰 삭제
+    public void deleteReview(String reviewerNickname, String ownerPrivateStatNM) {   // 리뷰 삭제
 
-        ReviewEntity selectedReview = reviewRepository.findByreviewerFirebaseToken(reviewerFirebaseToken)
+        ReviewEntity selectedReview = reviewRepository.findByreviewerNickname(reviewerNickname)
                 .orElseGet(()-> {return new ReviewEntity();});
 
         int selectedReviewIdx = selectedReview.getReviewIdx();
 
         //사용자의 리뷰 리스트에서도 지우기
-        UserEntity reviewer = reservationUserRepository.findByfirebaseToken(reviewerFirebaseToken).orElseGet(()->{
+        UserEntity reviewer = reservationUserRepository.findByid(reviewerNickname).orElseGet(()->{
             return new UserEntity();
         });
         reviewer.getReviewList().remove(selectedReview);
 
         //개인 충전소 리뷰 내역에서도 지우기
-        PrivateStation selectedPrivateStat = db_repository_private.findByfirebaseToken(ownerFirebaseToken).orElseGet(
+        PrivateStation selectedPrivateStat = db_repository_private.findBystatNM(ownerPrivateStatNM).orElseGet(
                 () -> {return new PrivateStation();});
         selectedPrivateStat.getReviewList().remove(selectedReview);
 

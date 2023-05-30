@@ -27,6 +27,9 @@ public class Reservation_Service {
         PrivateStation privateStation = db_repository_private.findBystatNM(name).orElseGet(PrivateStation::new);
 
         reservation_info.setChecking("대기");
+
+
+
         privateStation.getReservations().add(reservation_info);
         reservation_repository.save(reservation_info);
     }
