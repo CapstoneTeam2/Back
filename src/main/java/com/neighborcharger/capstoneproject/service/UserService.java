@@ -2,6 +2,7 @@ package com.neighborcharger.capstoneproject.service;
 
 
 import com.neighborcharger.capstoneproject.model.PrivateStation;
+import com.neighborcharger.capstoneproject.model.Reservation_info;
 import com.neighborcharger.capstoneproject.model.base.BaseException;
 import com.neighborcharger.capstoneproject.model.kakao.KakaoMemberCheckResDTO;
 import com.neighborcharger.capstoneproject.model.user.*;
@@ -11,6 +12,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.neighborcharger.capstoneproject.model.base.BaseResponseStatus.*;
 
@@ -220,11 +223,28 @@ public class UserService {
 
         }
     }
-    @Transactional
     public UserEntity User_get(String id){
-        UserEntity userEntity = reservationUserRepository.findByid(id).orElseGet(()->{
-            return new UserEntity();
-        });
+        UserEntity userEntity = reservationUserRepository.findByid(id).orElseGet(UserEntity::new);
         return userEntity;
+    }
+
+    public List<Reservation_info> getReservation(String id){
+        UserEntity userEntity = reservationUserRepository.findByid(id).orElseGet(UserEntity::new);
+        return userEntity.getReservations();
+    }
+
+    @Transactional
+    public void ReservationUpdate(String name, String StationName,String rep){
+        UserEntity userEntity = reservationUserRepository.findBynickname(name).orElseGet(UserEntity::new);
+        for(Reservation_info reservation_info : userEntity.getReservations()){
+            if(reservation_info.getStatNM().equals(StationName))
+                reservation_info.setChecking(rep);
+        }
+    }
+
+    @Transactional
+    public void insertReservation(String token, Reservation_info reservation_info){
+        UserEntity userEntity = reservationUserRepository.findByfirebaseToken(token).orElseGet(UserEntity::new);
+        userEntity.getReservations().add(reservation_info);
     }
 }

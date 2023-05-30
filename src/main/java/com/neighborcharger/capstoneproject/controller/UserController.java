@@ -1,5 +1,6 @@
 package com.neighborcharger.capstoneproject.controller;
 
+import com.neighborcharger.capstoneproject.model.Reservation_info;
 import com.neighborcharger.capstoneproject.model.base.BaseException;
 import com.neighborcharger.capstoneproject.model.base.BaseResponse;
 import com.neighborcharger.capstoneproject.model.kakao.KakaoMemberCheckResDTO;
@@ -10,6 +11,7 @@ import com.neighborcharger.capstoneproject.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.neighborcharger.capstoneproject.model.base.BaseResponseStatus.*;
@@ -161,5 +163,10 @@ public class UserController {
     public  UserEntity userEntity(@PathVariable String id){
         return userService.User_get(id);
     }
-}
 
+    @GetMapping("/UserReservation/{id}")
+    public List<Reservation_info> reservation_infos(@PathVariable String id){
+        List<Reservation_info> reservation_info = userService.getReservation(id);
+        return reservation_info;
+    }
+}

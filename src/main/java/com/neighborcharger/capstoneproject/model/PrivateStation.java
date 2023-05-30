@@ -81,6 +81,12 @@ public class PrivateStation {
     private float score;
 
     @Column
+    private double totalcost;
+
+    @Column
+    private double totalelectric;
+
+    @Column
     @OneToMany
     private List<Reservation_info> reservations = new ArrayList<>();
 

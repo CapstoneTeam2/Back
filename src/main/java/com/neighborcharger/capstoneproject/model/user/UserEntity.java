@@ -1,6 +1,10 @@
 package com.neighborcharger.capstoneproject.model.user;
 
+
 import com.neighborcharger.capstoneproject.model.ReviewEntity;
+
+import com.neighborcharger.capstoneproject.model.Reservation_info;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,6 +56,10 @@ public class UserEntity {
     @OneToMany
     private List<ReviewEntity> reviewList = new ArrayList<>();
 
+    @Column
+    @OneToMany
+    private List<Reservation_info> reservations = new ArrayList<>();
+
 
     //일반 로그인 시
     public UserEntity(int userIdx, String nickname,
@@ -95,6 +103,8 @@ public class UserEntity {
         this.chgerType = chgerType;
         //this.kakaoIdx = kakaoIdx;
     }
+
+
 }
 
 

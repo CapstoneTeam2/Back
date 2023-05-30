@@ -1,13 +1,17 @@
 package com.neighborcharger.capstoneproject.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.neighborcharger.capstoneproject.model.Reservation_info;
 import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.service.DB_Service;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.PublicStation;
+import com.neighborcharger.capstoneproject.service.UserService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
@@ -24,6 +28,12 @@ public class DB_Controller {
     @Autowired
     private DB_Service db_service;
 
+    @Autowired
+    MyScheduledTask myScheduledTask;
+
+    @Autowired
+    UserService userService;
+
     @GetMapping("/User_Search_Token/{token}")
     public UserEntity userEntity(@PathVariable String token) {return db_service.search_Token(token);}
 
@@ -31,7 +41,9 @@ public class DB_Controller {
     public List<PrivateStation> privateStations() {return db_service.privateStationGet();}
 
     @GetMapping("/All_Station_get")
-    public List<Object> allStation() {return db_service.findAllBychgerType();}
+    public List<Object> allStation() {
+        myScheduledTask.scheduleFunctionAtTime("34 * * * * *");
+        return db_service.findAllBychgerType();}
 
     @GetMapping("/Public_Station_get")
     public List<PublicStation> publicStation(){
@@ -130,5 +142,12 @@ public class DB_Controller {
     public String Register_Station(@RequestBody PrivateStation privateStation){
         db_service.insertDB_private(privateStation);
         return "개인 충전기 등록";
+    }
+
+    @GetMapping("/StationReservation/{id}")
+    public List<Reservation_info> StationReservation(@PathVariable String id){
+        String username = userService.User_get(id).getNickname();
+        PrivateStation privateStation = db_service.privateStationfindOwner(username);
+        return privateStation.getReservations();
     }
 }
