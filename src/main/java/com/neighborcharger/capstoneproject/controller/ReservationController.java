@@ -54,12 +54,19 @@ public class ReservationController {
         Reservation_info reservation_info = new Reservation_info();
         reservation_info.setStatNM(reservationDTO.getStationName());
         reservation_info.setReservationperson(reservationDTO.getReservationPerson());
-
+        reservation_info.setChecking("대기");
         // "yyyy-MM-dd HH:mm:ss.SSS" 형식의 문자열
+        System.out.println("################################################################");
+        System.out.println("##################"+reservationDTO.getStarttime()+"###########");
+        System.out.println("##################"+reservationDTO.getEndtime());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         LocalDateTime startTime = LocalDateTime.parse(reservationDTO.getStarttime(), formatter);
         LocalDateTime endTime = LocalDateTime.parse(reservationDTO.getEndtime(), formatter);
+
+        System.out.println("##################################################################");
+        System.out.println("##################"+reservationDTO.getStarttime()+"###########");
+        System.out.println("##################"+reservationDTO.getEndtime());
 
         reservation_info.setStart_time(startTime);
         reservation_info.setEnd_time(endTime);
