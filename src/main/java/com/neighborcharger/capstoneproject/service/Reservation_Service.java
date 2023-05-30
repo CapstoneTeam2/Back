@@ -1,7 +1,9 @@
 package com.neighborcharger.capstoneproject.service;
 
 import com.google.api.client.util.DateTime;
+import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
+import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
 import com.neighborcharger.capstoneproject.repository.Reservation_Repository;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
@@ -21,6 +23,9 @@ public class Reservation_Service {
     Reservation_Repository reservation_repository;
     @Autowired
     DB_Repository_private db_repository_private;
+
+    @Autowired
+    ReservationUserRepository reservationUserRepository;
 
     @Transactional
     public void Time_Reservation_service(Reservation_info reservation_info, String name){
@@ -64,5 +69,14 @@ public class Reservation_Service {
             list.add(reservationInfo.getEnd_time());
         }
         return list;
+    }
+
+    @Transactional // 한 사용자의 예약 내역 보기
+    public List<Reservation_info> myReservationList(String nickname){
+        UserEntity user = reservationUserRepository.findBynickname(nickname)
+                .orElseGet(UserEntity::new);
+
+        List<Reservation_info> myReservations = user.getReservations();
+        return myReservations;
     }
 }

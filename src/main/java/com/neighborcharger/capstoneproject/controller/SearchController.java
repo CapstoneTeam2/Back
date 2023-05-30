@@ -21,4 +21,5 @@ public class SearchController {
         List<StationDTO> correctStatList = searchService.searchStatNM(keyword);
         return correctStatList;
     }
+
 }
