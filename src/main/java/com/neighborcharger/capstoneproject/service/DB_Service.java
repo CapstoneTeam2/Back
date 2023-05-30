@@ -1,5 +1,7 @@
 package com.neighborcharger.capstoneproject.service;
 
+import com.google.api.client.util.DateTime;
+import com.neighborcharger.capstoneproject.model.Reservation_info;
 import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.repository.DB_Repository;
 import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
@@ -30,6 +32,18 @@ public class DB_Service {
     @Transactional
     public void insertDB_private(PrivateStation privateStation) {
         db_repository_private.save(privateStation);
+    }
+
+    @Transactional
+    public void updateTotal(PrivateStation privateStation, double cost, double elect, String nickname){
+        PrivateStation privateStation1 = privateStation;
+        privateStation1.setTotalelectric(elect);
+        privateStation1.setTotalcost(cost);
+        for(Reservation_info reservation_info : privateStation1.getReservations()){
+            if(reservation_info.getReservationperson().equals(nickname)){ // 예약자 찾음
+                reservation_info.setChecking("충전 완료"); // 거래 완료? 충전 완료?
+            }
+        }
     }
 
     @Transactional
@@ -73,12 +87,17 @@ public class DB_Service {
 
     @Transactional
     public PrivateStation privateStation_fillter_get(String name){
-        PrivateStation privateStation = db_repository_private.findBystatNM(name).orElseGet(()->{
-            return new PrivateStation();
-        });
+        PrivateStation privateStation = db_repository_private.findBystatNM(name).orElseGet(PrivateStation::new);
 
         return privateStation;
     }
+
+    public PrivateStation privateStationfindOwner(String name){
+        PrivateStation privateStation = db_repository_private.findByownerName(name).orElseGet(PrivateStation::new);
+
+        return privateStation;
+    }
+
 
     @Transactional
     public List<Object> findAllBychgerType() {

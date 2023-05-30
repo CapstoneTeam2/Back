@@ -4,6 +4,10 @@ import com.neighborcharger.capstoneproject.model.user.StationHardWare;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -26,10 +30,10 @@ public class Reservation_info {
     private String statNM;
 
     @Column
-    private String start_time;
+    private LocalTime start_time;
 
     @Column
-    private String end_time;
+    private LocalTime end_time;
 
     @OneToOne
     private StationHardWare stationHardWare;

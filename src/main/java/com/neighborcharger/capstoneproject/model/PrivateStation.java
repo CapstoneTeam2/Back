@@ -72,6 +72,12 @@ public class PrivateStation {
     private String component;
 
     @Column
+    private double totalcost;
+
+    @Column
+    private double totalelectric;
+
+    @Column
     @OneToMany
     private List<Reservation_info> reservations = new ArrayList<>();
 }

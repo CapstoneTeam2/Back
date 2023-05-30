@@ -1,5 +1,6 @@
 package com.neighborcharger.capstoneproject.model.user;
 
+import com.neighborcharger.capstoneproject.model.Reservation_info;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,6 +48,9 @@ public class UserEntity {
     @Column(name = "firebase_token")
     private String firebaseToken;
 
+    @Column
+    @OneToMany
+    private List<Reservation_info> reservations = new ArrayList<>();
 
     //일반 로그인 시
     public UserEntity(int userIdx, String nickname,
@@ -88,6 +94,8 @@ public class UserEntity {
         this.chgerType = chgerType;
         //this.kakaoIdx = kakaoIdx;
     }
+
+
 }
 
 
