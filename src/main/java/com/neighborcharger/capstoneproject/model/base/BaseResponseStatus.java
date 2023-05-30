@@ -27,12 +27,6 @@ public enum BaseResponseStatus {
     EMPTY_USER_IDX(false,2009,"유저 인덱스를 입력해주세요."),
 
 
-    INVALID_ACCESS_KAKAO(false, 2010, "지원되지 않거나 잘못된 Kakao Access 토큰 입니다."),
-
-    INVALID_REFRESH_KAKAO(false, 2011, "지원되지 않거나 잘못된 Kakao Refresh 토큰 입니다."),
-    EXPIRED_ACCESS_KAKAO(false, 2012, "만료된 Kakao Access 토큰입니다. Kakao Refresh 토큰을 이용해서 새로운 Kakao Access 토큰을 발급 받으세요."),
-    EXPIRED_REFRESH_KAKAO(false,2013,"만료된 Kakao Refresh 토큰입니다. 다시 로그인해주세요."),
-
 
     /**
      * 5000 SignUP , LogIn

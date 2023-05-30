@@ -36,9 +36,15 @@ public class Reservation_Service {
         PrivateStation privateStation = db_repository_private.findByownerName(owner).orElseGet(()->{
             return new PrivateStation();
         });
+
         Reservation_info reservation_info = reservation_repository.findByreservationperson(ReservationPerson).orElseGet(()->{
             return new Reservation_info();
         });
+
+
+//         privateStation.getReservations().remove(reservation_info);
+//         reservation_repository.deleteById(Math.toIntExact(reservation_info.getId()));
+
         reservation_info.setChecking("거절");
     }
 
@@ -46,7 +52,9 @@ public class Reservation_Service {
     public void updateReservationStat(Reservation_info reservation_info, String resp){
         Reservation_info reservationInfo = reservation_info;
         reservationInfo.setChecking(resp);
+
     }
+    
 
     public List<LocalTime> reservationLists(String stationName) {
         PrivateStation privateStation = db_repository_private.findBystatNM(stationName).orElseGet(PrivateStation::new);
