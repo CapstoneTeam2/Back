@@ -38,9 +38,9 @@ public class hardwareService {
     @Transactional
     public String startSetting(StationHardWare stationHardWare){
 
-        LocalTime localTime = LocalTime.now();
-        stationHardWare.setRealStartTime(localTime);
-        System.out.println("#########"+localTime);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        stationHardWare.setRealStartTime(localDateTime);
+        System.out.println("#########"+localDateTime);
         hardwareRepository.save(stationHardWare);
         Reservation_info reservation_info = reservation_repository.findByreservationperson(stationHardWare.getNickname()).orElseGet(()->{
             return new Reservation_info();
@@ -59,8 +59,8 @@ public class hardwareService {
         StationHardWare stationHardWare = hardwareRepository.findBynickname(nickname).orElseGet(StationHardWare::new);
         PrivateStation privateStation = db_repository_private.findBystatNM(stationName).orElseGet(PrivateStation::new);
         ChargingCarDTO chargingCarDTO = new ChargingCarDTO();
-        LocalTime localTime = LocalTime.now();
-        Duration duration = Duration.between(stationHardWare.getRealStartTime(), localTime);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Duration duration = Duration.between(stationHardWare.getRealStartTime(), localDateTime);
 
         long hours = duration.toHours();
         long minutes = duration.toMinutesPart();

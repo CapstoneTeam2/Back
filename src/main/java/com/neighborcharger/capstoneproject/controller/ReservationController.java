@@ -1,6 +1,7 @@
 package com.neighborcharger.capstoneproject.controller;
 
 import com.google.api.client.util.DateTime;
+import com.neighborcharger.capstoneproject.DTO.ReservationDTO;
 import com.neighborcharger.capstoneproject.DTO.Respone_DTO;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
@@ -13,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -46,11 +50,21 @@ public class ReservationController {
     }*/
 
     @PostMapping("/Time_Reservation/{TargetToken}/target/{returnToken}")
-    private String Time_Reservation(@RequestBody Reservation_info reservation_info, @PathVariable String TargetToken, @PathVariable String returnToken) throws IOException {
-        System.out.println(TargetToken);
-        System.out.println(reservation_info);
+    private String Time_Reservation(@RequestBody ReservationDTO reservationDTO, @PathVariable String TargetToken, @PathVariable String returnToken) throws IOException {
+        Reservation_info reservation_info = new Reservation_info();
+        reservation_info.setStatNM(reservationDTO.getStationName());
+        reservation_info.setReservationperson(reservationDTO.getReservationPerson());
 
-        reservationService.Time_Reservation_service(reservation_info, reservation_info.getStatNM());
+        // "yyyy-MM-dd HH:mm:ss.SSS" 형식의 문자열
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime startTime = LocalDateTime.parse(reservationDTO.getStarttime(), formatter);
+        LocalDateTime endTime = LocalDateTime.parse(reservationDTO.getEndtime(), formatter);
+
+        reservation_info.setStart_time(startTime);
+        reservation_info.setEnd_time(endTime);
+
+        reservationService.Time_Reservation_service(reservation_info, reservationDTO.getStationName());
         userService.insertReservation(returnToken, reservation_info);
         firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time().toString(), reservation_info.getEnd_time().toString(), "예약");
 
@@ -83,8 +97,8 @@ public class ReservationController {
     }
 
     @GetMapping("/ReservationTimeInfo/{stationName}") // 이 충전소의 예약 되어 있는 시간 GET
-    public List<LocalTime> reservationList(@PathVariable String stationName){
-        List<LocalTime> dateTimes = reservationService.reservationLists(stationName);
+    public List<LocalDateTime> reservationList(@PathVariable String stationName){
+        List<LocalDateTime> dateTimes = reservationService.reservationLists(stationName);
         return dateTimes;
     }
 }
