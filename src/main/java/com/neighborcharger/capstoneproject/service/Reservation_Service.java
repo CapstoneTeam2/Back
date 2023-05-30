@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,8 @@ public class Reservation_Service {
 
     @Transactional
     public void Time_Reservation_service(Reservation_info reservation_info, String name){
-        PrivateStation privateStation = db_repository_private.findBystatNM(name).orElseThrow(()->{
-            return new IllegalArgumentException("");
-        });
+        PrivateStation privateStation = db_repository_private.findBystatNM(name).orElseGet(PrivateStation::new);
+
         reservation_info.setChecking("대기");
 
 
@@ -57,11 +57,10 @@ public class Reservation_Service {
         reservationInfo.setChecking(resp);
 
     }
-    
 
-    public List<LocalTime> reservationLists(String stationName) {
+    public List<LocalDateTime> reservationLists(String stationName) {
         PrivateStation privateStation = db_repository_private.findBystatNM(stationName).orElseGet(PrivateStation::new);
-        List<LocalTime> list = new ArrayList<>();
+        List<LocalDateTime> list = new ArrayList<>();
         for(Reservation_info reservationInfo : privateStation.getReservations()){
             list.add(reservationInfo.getStart_time());
             list.add(reservationInfo.getEnd_time());

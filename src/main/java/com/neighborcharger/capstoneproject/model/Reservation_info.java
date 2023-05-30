@@ -2,6 +2,7 @@ package com.neighborcharger.capstoneproject.model;
 
 import com.neighborcharger.capstoneproject.model.user.StationHardWare;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -29,11 +30,13 @@ public class Reservation_info {
     @Column
     private String statNM;
 
+    @DateTimeFormat (pattern = "yyyy-MM-dd HH:mm:ss")
     @Column
-    private LocalTime start_time;
+    private LocalDateTime start_time;
 
+    @DateTimeFormat (pattern = "yyyy-MM-dd HH:mm:ss")
     @Column
-    private LocalTime end_time;
+    private LocalDateTime end_time;
 
     @OneToOne
     private StationHardWare stationHardWare;
