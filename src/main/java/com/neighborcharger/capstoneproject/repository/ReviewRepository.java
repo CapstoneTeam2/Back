@@ -11,6 +11,5 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
     //Optional<ReviewEntity> findByprivateStationId(int statId);
 
-    Optional<ReviewEntity> findByreviewerFirebaseToken(String reviewerFirebaseToken);
-
+    Optional<ReviewEntity> findByreviewerNickname(String reviewerNickname);
 }

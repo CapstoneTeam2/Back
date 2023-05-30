@@ -13,8 +13,10 @@ public class RegisterReviewReqDTO { // 리뷰 등록 시 서버가 프론트로 
 
     String text; // 리뷰 내용
     int score; // 별점 (1 ~ 5)
-    String reviewerFirebaseToken; // 리뷰쓴 사람 파베 토큰
-    String ownerFirebaseToken; // 충전소 주인 파베 토큰
+    //String reviewerFirebaseToken; // 리뷰쓴 사람 파베 토큰
+    //String ownerFirebaseToken; // 충전소 주인 파베 토큰
+    String reviewerNickname; //리뷰쓴 사람 닉네임
+    String ownerPrivateStatNM; //해당 충전소명
 
 }
 

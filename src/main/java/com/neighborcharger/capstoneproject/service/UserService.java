@@ -113,8 +113,9 @@ public class UserService {
     @Transactional
     public CreateUserResDTO createIdUser(CreateIdUserReqDTO createIdUserReqDTO) throws BaseException{
 
+        //지워도 됨
         //닉네임 중복확인
-        checkNickname(createIdUserReqDTO.getNickname());
+        //checkNickname(createIdUserReqDTO.getNickname());
 
         // createUser 메소드에 넘겨줄 UserEntity 객체 생성
         UserEntity userEntity = new UserEntity(
@@ -128,6 +129,7 @@ public class UserService {
 
 
         int userId = userRepository.createIdUser(userEntity);
+
         // JWT !!!!!
         String jwtAccessToken = jwtService.createAccessToken(userId);
         String jwtRefreshToken = jwtService.createRefreshToken(userId);
@@ -139,10 +141,10 @@ public class UserService {
                 createIdUserReqDTO.getNickname(),
                 createIdUserReqDTO.getCarType(),
                 createIdUserReqDTO.getChgerType(),
-                createIdUserReqDTO.getFirebaseToken(),
                 "N",
                 jwtAccessToken,
-                jwtRefreshToken
+                jwtRefreshToken,
+                createIdUserReqDTO.getFirebaseToken()
         );
     }
 

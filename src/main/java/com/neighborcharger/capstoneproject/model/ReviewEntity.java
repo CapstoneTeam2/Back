@@ -28,22 +28,22 @@ public class ReviewEntity {
     private int score; // 별점
 
     @Column
-    private String reviewerFirebaseToken; // 리뷰 쓴 사람 파베 토큰
+    private String reviewerNickname; // 리뷰 쓴 사람 닉네임
 
     @Column
     private String text; // 리뷰 내용
 
     @Column
-    private String ownerFirebaseToken; // 충전소 소유자 파베토큰
+    private String ownerPrivateStatNM; // 충전소명
 
     @CreationTimestamp
     @Column
     private LocalDateTime registerTime;
 
-    public ReviewEntity(int score, String reviewerFirebaseToken, String text, String ownerFirebaseToken) {
+    public ReviewEntity(int score, String reviewerNickname, String text, String ownerPrivateStatNM) {
         this.score = score;
-        this.reviewerFirebaseToken = reviewerFirebaseToken;
+        this.reviewerNickname = reviewerNickname;
         this.text = text;
-        this.ownerFirebaseToken = ownerFirebaseToken;
+        this.ownerPrivateStatNM = ownerPrivateStatNM;
     }
 }
