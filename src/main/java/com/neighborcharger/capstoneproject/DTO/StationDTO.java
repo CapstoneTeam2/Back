@@ -9,7 +9,6 @@ import lombok.*;
 public class StationDTO {
 
     private boolean isPublicStat; // 공용/개인 충전소 여부
-
     private String statNM; // 충전소명
     private String addr; // 주소
 
