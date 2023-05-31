@@ -31,16 +31,16 @@ public class ReviewController {
     }
 
 
-    @DeleteMapping("/delete/{reviewerToken}/{ownerToken}")
-    public String deleteReview(@PathVariable String reviewerToken, @PathVariable String ownerToken){
-        reviewService.deleteReview(reviewerToken, ownerToken);
+    @DeleteMapping("/delete/{reviewerNickname}/{ownerPrivateStatNM}")
+    public String deleteReview(@PathVariable String reviewerNickname, @PathVariable String ownerPrivateStatNM){
+        reviewService.deleteReview(reviewerNickname, ownerPrivateStatNM);
 
         return "리뷰를 삭제하였습니다.";
     }
 
-    @GetMapping("/byMe/{token}")
-    public List<ReviewEntity> myReviewList(@PathVariable String token){
-        List<ReviewEntity> result = reviewService.myReviewList(token);
+    @GetMapping("/byMe/{nickname}")
+    public List<ReviewEntity> myReviewList(@PathVariable String nickname){
+        List<ReviewEntity> result = reviewService.myReviewList(nickname);
         return result;
     }
 

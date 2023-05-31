@@ -4,6 +4,7 @@ import com.google.api.client.util.DateTime;
 import com.neighborcharger.capstoneproject.DTO.ReservationDTO;
 import com.neighborcharger.capstoneproject.DTO.Respone_DTO;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
+import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
 import com.neighborcharger.capstoneproject.service.DB_Service;
 import com.neighborcharger.capstoneproject.service.FirebaseCloudMessage_Service;
@@ -108,4 +109,11 @@ public class ReservationController {
         List<LocalDateTime> dateTimes = reservationService.reservationLists(stationName);
         return dateTimes;
     }
+
+    @GetMapping("/Reservation/myList/{nickname}")
+    public List<Reservation_info> myReservationList (@PathVariable String nickname){
+        List<Reservation_info> result = reservationService.myReservationList(nickname);
+        return result;
+    }
+
 }
