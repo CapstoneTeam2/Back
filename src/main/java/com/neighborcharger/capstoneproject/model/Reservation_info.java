@@ -40,4 +40,7 @@ public class Reservation_info {
 
     @OneToOne
     private StationHardWare stationHardWare;
+
+    @Column
+    private boolean isReviewed;
 }

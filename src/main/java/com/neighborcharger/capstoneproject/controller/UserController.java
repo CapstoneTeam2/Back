@@ -3,10 +3,7 @@ package com.neighborcharger.capstoneproject.controller;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
 import com.neighborcharger.capstoneproject.model.base.BaseException;
 import com.neighborcharger.capstoneproject.model.base.BaseResponse;
-import com.neighborcharger.capstoneproject.model.kakao.KakaoMemberCheckResDTO;
-import com.neighborcharger.capstoneproject.model.kakao.KakaoUserValidReqDTO;
 import com.neighborcharger.capstoneproject.model.user.*;
-//import com.neighborcharger.capstoneproject.service.KakaoService;
 import com.neighborcharger.capstoneproject.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
@@ -168,5 +165,11 @@ public class UserController {
     public List<Reservation_info> reservation_infos(@PathVariable String id){
         List<Reservation_info> reservation_info = userService.getReservation(id);
         return reservation_info;
+    }
+
+    @DeleteMapping("/deleteUser")
+    public String deleteUser(@PathVariable String nickname){
+        userService.deleteUser(nickname);
+        return "탈퇴되었습니다.";
     }
 }

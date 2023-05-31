@@ -10,21 +10,21 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url : jdbc:mysql://115.85.183.243:3306/team?serverTimezone=Asia/Seoul
+    # url : jdbc:mysql://115.85.183.243:3306/team?serverTimezone=Asia/Seoul
     #    url: jdbc:mysql://localhost:3306/team?serverTimezone=Asia/Seoul
     #    username: cho
     #    password: hee6455
-    username : spring
-    password : hee6455
+    #username : spring
+    #password : hee6455
     #username : admin
     #password : team2nc!
 
-    # url: jdbc:mysql://neighborcharger.cmobwlvkrcpm.ap-northeast-2.rds.amazonaws.com:3306/neighborcharger?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://neighborcharger.cmobwlvkrcpm.ap-northeast-2.rds.amazonaws.com:3306/neighborcharger?serverTimezone=Asia/Seoul
     # url: jdbc:mysql://localhost:3306/team?serverTimezone=Asia/Seoul
     #    username: cho
     #    password: hee6455
-    #username : admin
-    #password : team2nc!
+    username : admin
+    password : team2nc!
 
 
     #url: jdbc:mysql://neighborcharger.cmobwlvkrcpm.ap-northeast-2.rds.amazonaws.com:3306/neighborcharger?serverTimezone=Asia/Seoul
