@@ -3,6 +3,7 @@ package com.neighborcharger.capstoneproject.service;
 import com.neighborcharger.capstoneproject.DTO.RegisterReviewReqDTO;
 import com.neighborcharger.capstoneproject.DTO.RegisterReviewResDTO;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
+import com.neighborcharger.capstoneproject.model.Reservation_info;
 import com.neighborcharger.capstoneproject.model.ReviewEntity;
 import com.neighborcharger.capstoneproject.model.base.BaseException;
 import com.neighborcharger.capstoneproject.model.user.CreateIdUserReqDTO;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class ReviewService {
@@ -55,6 +57,13 @@ public class ReviewService {
         selectedPrivateStat.getReviewList().add(reviewEntity);
         //해당 개인이 쓴 리뷰 리스트에 이번 리뷰 더하기
         reviewer.getReviewList().add(reviewEntity);
+
+        //리뷰한 사람 찾아낸 걸로 해당 충전소 리뷰쓴 boolean 값 바꾸기
+        for(Reservation_info reservation_info : reviewer.getReservations()){
+            if (reservation_info.getStatNM() == selectedPrivateStat.getStatNM()){
+                reservation_info.setReviewed(true);
+            }
+        }
 
             // 총 별점이랑 리뷰 수 가져오기
         int totalScore;

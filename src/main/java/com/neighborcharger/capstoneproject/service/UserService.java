@@ -4,7 +4,6 @@ package com.neighborcharger.capstoneproject.service;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
 import com.neighborcharger.capstoneproject.model.base.BaseException;
-import com.neighborcharger.capstoneproject.model.kakao.KakaoMemberCheckResDTO;
 import com.neighborcharger.capstoneproject.model.user.*;
 import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
 import com.neighborcharger.capstoneproject.repository.UserRepository;
@@ -248,5 +247,13 @@ public class UserService {
     public void insertReservation(String token, Reservation_info reservation_info){
         UserEntity userEntity = reservationUserRepository.findByfirebaseToken(token).orElseGet(UserEntity::new);
         userEntity.getReservations().add(reservation_info);
+    }
+
+    @Transactional
+    public void deleteUser(String nickname){
+        UserEntity user = reservationUserRepository.findBynickname(nickname).orElseGet(UserEntity::new);
+        int userIdx = user.getUserIdx();
+
+        reservationUserRepository.deleteById(userIdx);
     }
 }
