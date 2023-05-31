@@ -29,9 +29,6 @@ public class DB_Controller {
     private DB_Service db_service;
 
     @Autowired
-    MyScheduledTask myScheduledTask;
-
-    @Autowired
     UserService userService;
 
     @GetMapping("/User_Search_Token/{token}")
@@ -42,8 +39,8 @@ public class DB_Controller {
 
     @GetMapping("/All_Station_get")
     public List<Object> allStation() {
-        myScheduledTask.scheduleFunctionAtTime("34 * * * * *");
-        return db_service.findAllBychgerType();}
+        return db_service.findAllBychgerType();
+    }
 
     @GetMapping("/Public_Station_get")
     public List<PublicStation> publicStation(){
