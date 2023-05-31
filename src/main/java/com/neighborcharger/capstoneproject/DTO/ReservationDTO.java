@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ReservationDTO {
     String reservationPerson;
-    String StationName;
+    String stationName;
     String starttime;
     String endtime;
 }
