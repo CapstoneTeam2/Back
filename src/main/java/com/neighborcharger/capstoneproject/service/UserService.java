@@ -256,4 +256,10 @@ public class UserService {
 
         reservationUserRepository.deleteById(userIdx);
     }
+
+    @Transactional
+    public void allDeleteUser(){
+        reservationUserRepository.deleteAll();
+    }
+
 }

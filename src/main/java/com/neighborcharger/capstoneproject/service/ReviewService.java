@@ -58,13 +58,6 @@ public class ReviewService {
         //해당 개인이 쓴 리뷰 리스트에 이번 리뷰 더하기
         reviewer.getReviewList().add(reviewEntity);
 
-        //리뷰한 사람 찾아낸 걸로 해당 충전소 리뷰쓴 boolean 값 바꾸기
-        for(Reservation_info reservation_info : reviewer.getReservations()){
-            if (reservation_info.getStatNM() == selectedPrivateStat.getStatNM()){
-                reservation_info.setReviewed(true);
-            }
-        }
-
             // 총 별점이랑 리뷰 수 가져오기
         int totalScore;
         int reviewTotalCnt;
@@ -84,6 +77,18 @@ public class ReviewService {
         float resultScore = totalScore/reviewTotalCnt;
         selectedPrivateStat.setScore(resultScore);
 
+        System.out.println("방금 별점 업데이트함 ########이제 리뷰 값 바꿀겨");
+
+
+        //리뷰한 사람 찾아낸 걸로 해당 충전소 리뷰쓴 boolean 값 바꾸기
+        for(Reservation_info reservation_info : reviewer.getReservations()){
+            System.out.println("예약명단에서의 이름 : " + reservation_info.getStatNM() );
+            System.out.println("충전소에서 가져오는 이름 : " + selectedPrivateStat.getStatNM() );
+            if (reservation_info.getStatNM().equals(selectedPrivateStat.getStatNM())){
+                reservation_info.setReviewed(true);
+                System.out.println("yeses리뷰함******");
+            }
+        }
 
         return new RegisterReviewResDTO(
                 "리뷰가 등록되었습니다.",
