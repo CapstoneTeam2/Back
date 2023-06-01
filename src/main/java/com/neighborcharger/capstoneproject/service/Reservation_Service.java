@@ -1,6 +1,7 @@
 package com.neighborcharger.capstoneproject.service;
 
 import com.google.api.client.util.DateTime;
+import com.neighborcharger.capstoneproject.DTO.PredictResDTO;
 import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
 import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
@@ -78,5 +79,27 @@ public class Reservation_Service {
 
         List<Reservation_info> myReservations = user.getReservations();
         return myReservations;
+    }
+
+    public PredictResDTO prediccostandtime(double capacity, int percent, int cost, String Power){
+        double power = Double.parseDouble(Power);
+        double charging = capacity * percent / 100;
+        PredictResDTO predictResDTO = new PredictResDTO();
+        double Times = charging / power;
+        System.out.println(capacity);
+        System.out.println(percent);
+        System.out.println(cost);
+
+        System.out.println("Times : " + Times);
+        double preCost = Times * cost;
+        int our = (int) (charging / power);
+        int min = (int) (charging % power);
+        String.valueOf(preCost);
+        String preTime = our + "시간 " + min + "분";
+        System.out.println(preTime);
+        predictResDTO.setPrediccost(String.valueOf(preCost));
+        predictResDTO.setPredictime(preTime);
+        System.out.println(predictResDTO);
+        return predictResDTO;
     }
 }
