@@ -156,6 +156,7 @@ public class UserController {
         }
 
     }
+
     @GetMapping("/get/{id}")
     public  UserEntity userEntity(@PathVariable String id){
         return userService.User_get(id);
@@ -167,9 +168,17 @@ public class UserController {
         return reservation_info;
     }
 
-    @DeleteMapping("/deleteUser")
+    @DeleteMapping("/deleteUser/{nickname}")
     public String deleteUser(@PathVariable String nickname){
         userService.deleteUser(nickname);
         return "탈퇴되었습니다.";
     }
+
+    @DeleteMapping("/deleteAllUser")
+    public String allDeleteUser(){
+        userService.allDeleteUser();
+        return "회원을 모두 삭제되었습니다.";
+    }
+
+
 }
