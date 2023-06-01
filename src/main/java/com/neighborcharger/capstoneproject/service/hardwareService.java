@@ -4,9 +4,11 @@ import com.neighborcharger.capstoneproject.DTO.ChargingCarDTO;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
 import com.neighborcharger.capstoneproject.model.user.StationHardWare;
+import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
 import com.neighborcharger.capstoneproject.repository.HardwareRepository;
 import com.neighborcharger.capstoneproject.repository.Reservation_Repository;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,13 +57,18 @@ public class hardwareService {
         stationHardWare1.setChgerState("충전 끝");
     }
     @Transactional
-    public ChargingCarDTO ChargingCar(String nickname,String stationName) throws ParseException {
-        StationHardWare stationHardWare = hardwareRepository.findBynickname(nickname).orElseGet(StationHardWare::new);
-        PrivateStation privateStation = db_repository_private.findBystatNM(stationName).orElseGet(PrivateStation::new);
+    public ChargingCarDTO ChargingCar(UserEntity userEntity) throws ParseException {
+        StationHardWare stationHardWare = new StationHardWare();
+
+        for(Reservation_info reservation_info : userEntity.getReservations()){
+            if(reservation_info.getStationHardWare().getChgerState().equals("충전중")){
+                stationHardWare = reservation_info.getStationHardWare();
+            }
+        }
         ChargingCarDTO chargingCarDTO = new ChargingCarDTO();
         LocalDateTime localDateTime = LocalDateTime.now();
         Duration duration = Duration.between(stationHardWare.getRealStartTime(), localDateTime);
-
+        PrivateStation privateStation = db_repository_private.findBystatNM(stationHardWare.getStatNM()).orElseGet(PrivateStation::new);
         long hours = duration.toHours();
         long minutes = duration.toMinutesPart();
         long seconds = duration.toSecondsPart();
@@ -88,5 +95,16 @@ public class hardwareService {
     }
     public double CalElectric(long Min, int power){
         return Min * power / 60.0;
+    }
+
+    public void qrStart(PrivateStation privateStation) {
+        LocalDateTime ldt = LocalDateTime.now();
+        for(Reservation_info reservation_info : privateStation.getReservations()){
+            boolean isBetween = reservation_info.getStart_time().isBefore(ldt) && ldt.isBefore(reservation_info.getEnd_time());
+            if(isBetween){
+                startSetting(reservation_info.getStationHardWare());
+                break;
+            }
+        }
     }
 }

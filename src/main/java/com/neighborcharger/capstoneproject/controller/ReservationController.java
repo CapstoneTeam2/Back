@@ -1,13 +1,12 @@
 package com.neighborcharger.capstoneproject.controller;
 
+import com.neighborcharger.capstoneproject.DTO.PredictReqDTO;
+import com.neighborcharger.capstoneproject.DTO.PredictResDTO;
 import com.neighborcharger.capstoneproject.DTO.ReservationDTO;
 import com.neighborcharger.capstoneproject.DTO.Respone_DTO;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
-import com.neighborcharger.capstoneproject.service.DB_Service;
-import com.neighborcharger.capstoneproject.service.FirebaseCloudMessage_Service;
-import com.neighborcharger.capstoneproject.service.Reservation_Service;
+import com.neighborcharger.capstoneproject.service.*;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
-import com.neighborcharger.capstoneproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +28,9 @@ public class ReservationController {
 
     @Autowired
     DB_Service db_service;
+
+    @Autowired
+    carservice carservices;
     /*@GetMapping("/Request")
     private String Request_Charge() throws IOException {
         firebaseCloudMessageService.sendMessageTo(
@@ -111,4 +113,16 @@ public class ReservationController {
         return result;
     }
 
+    @PostMapping("/PredictCostandTime/")
+    public PredictResDTO predictCostandTime(@RequestBody PredictReqDTO predictReqDTO){
+        double capacity = carservices.findCapacity(predictReqDTO.getCarmodelname());
+       PredictResDTO predictResDTO = reservationService.prediccostandtime(capacity, predictReqDTO.getWantpercent(), predictReqDTO.getStationcost(), predictReqDTO.getPower());
+        return predictResDTO;
+    }
+
+    @PostMapping("/insertCar")
+    public String insertCar(){
+        carservices.InsertCar();
+        return "차 삽입";
+    }
 }

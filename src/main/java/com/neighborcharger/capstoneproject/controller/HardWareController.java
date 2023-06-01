@@ -5,6 +5,7 @@ import com.neighborcharger.capstoneproject.DTO.ChargingStationDTO;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
 import com.neighborcharger.capstoneproject.model.user.StationHardWare;
+import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
 import com.neighborcharger.capstoneproject.service.DB_Service;
 import com.neighborcharger.capstoneproject.service.UserService;
@@ -37,9 +38,17 @@ public class HardWareController {
         return "시작!";
     }
 
-    @GetMapping("/ChargingCar/{nickname}/{stationName}") // 충전중 이용자에게 줄 정보
-    private ChargingCarDTO ChargingCar(@PathVariable String nickname, @PathVariable String stationName) throws ParseException {
-        ChargingCarDTO chargingCarDTO = hardwareservice.ChargingCar(nickname, stationName);
+    @PostMapping("/QRstationinfomation/{stationName}")
+    private String QRStart(String stationname){
+        PrivateStation privateStation = db_service.privateStation_fillter_get(stationname);
+        hardwareservice.qrStart(privateStation);
+        return "QR 스캔";
+    }
+
+    @GetMapping("/ChargingCar/{id}") // 충전중 이용자에게 줄 정보
+    private ChargingCarDTO ChargingCar(@PathVariable String id) throws ParseException {
+        UserEntity userEntity = userService.User_get(id);
+        ChargingCarDTO chargingCarDTO = hardwareservice.ChargingCar(userEntity);
         return chargingCarDTO;
     }
 
