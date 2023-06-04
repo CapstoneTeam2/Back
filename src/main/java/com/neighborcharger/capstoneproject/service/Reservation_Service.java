@@ -115,19 +115,22 @@ public class Reservation_Service {
     public StationHardWare findChargingPriceAndTime(PrivateStation privateStation){
         LocalDateTime ldt = LocalDateTime.now();
         Reservation_info findReservation = new Reservation_info();
+        System.out.println("이게 무슨 충전소?");
+        System.out.println(privateStation.getStatNM());
 
         for(Reservation_info reservation_info : privateStation.getReservations()){
             boolean isBetween = reservation_info.getStart_time().isBefore(ldt) && ldt.isBefore(reservation_info.getEnd_time());
             if(isBetween) {
                 findReservation = reservation_info;
+                System.out.println("이거 안나오면 안된거");
                 break;
             }
         }
-
+        System.out.println("####여기가 문제인듯####");
         String reservationPersonName = findReservation.getReservationperson();
-
+        System.out.println("니가문제냐?##################"+reservationPersonName);
         StationHardWare isChargingInform =  hardwareRepository.findBynickname(reservationPersonName).get();
-
+        System.out.println("너냐???#############"+isChargingInform.getRealStartTime());
         return isChargingInform;
 
 

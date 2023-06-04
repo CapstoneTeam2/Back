@@ -28,6 +28,7 @@ public class hardwareService {
     @Autowired
     DB_Repository_private db_repository_private;
 
+    @Autowired
     Reservation_Service reservation_service;
 
     public StationHardWare findstationHardWare(String reservaionPerson){
@@ -109,7 +110,7 @@ public class hardwareService {
         LocalDateTime ldt = LocalDateTime.now();
         Reservation_info reservation_info1 = new Reservation_info();
 
-        System.out.println("###########로그2 : 프라이빗 스테이션 문제? " + privateStation.getOwnerName());
+        System.out.println("###########3131그2 : 프라이빗 스테이션 문제? " + privateStation.getOwnerName());
 
         for(Reservation_info reservation_info : privateStation.getReservations()){
             boolean isBetween = reservation_info.getStart_time().isBefore(ldt) && ldt.isBefore(reservation_info.getEnd_time());
@@ -120,6 +121,7 @@ public class hardwareService {
         }
 
         if (reservation_info1.getStationHardWare() == null){ //처음 qr 찍었을 경우
+            System.out.println(reservation_info1.getStatNM()+"###############################3");
             StationHardWare stationHardWare = new StationHardWare();
             stationHardWare.setChgerState("충전중");
             stationHardWare.setRealStartTime(ldt);
@@ -132,8 +134,9 @@ public class hardwareService {
             return null;
 
         } else{ // 충전 중일 경우
-            StationHardWare statHw = reservation_service.findChargingPriceAndTime(privateStation);
-            return statHw;
+            System.out.println(reservation_info1.getStatNM()+"######2222222#########################3");
+
+           return reservation_service.findChargingPriceAndTime(privateStation);
         }
 
 
