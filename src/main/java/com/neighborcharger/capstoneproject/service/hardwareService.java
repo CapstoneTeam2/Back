@@ -66,7 +66,7 @@ public class hardwareService {
             }
         }
         ChargingCarDTO chargingCarDTO = new ChargingCarDTO();
-
+        System.out.println(stationHardWare.getChgerState());
         if(stationHardWare.getChgerState() == null) {
             chargingCarDTO.setCost(0);
             chargingCarDTO.setUsingElectric(0);
@@ -74,28 +74,29 @@ public class hardwareService {
 
             return chargingCarDTO;
         }
+        else {
+            LocalDateTime localDateTime = LocalDateTime.now();
+            Duration duration = Duration.between(stationHardWare.getRealStartTime(), localDateTime);
+            PrivateStation privateStation = db_repository_private.findBystatNM(stationHardWare.getStatNM()).orElseGet(PrivateStation::new);
+            long hours = duration.toHours();
+            long minutes = duration.toMinutesPart();
+            long seconds = duration.toSecondsPart();
 
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Duration duration = Duration.between(stationHardWare.getRealStartTime(), localDateTime);
-        PrivateStation privateStation = db_repository_private.findBystatNM(stationHardWare.getStatNM()).orElseGet(PrivateStation::new);
-        long hours = duration.toHours();
-        long minutes = duration.toMinutesPart();
-        long seconds = duration.toSecondsPart();
+            //System.out.println(stationHardWare.getRealStartTime());
+            //System.out.println(localTime);
 
-        //System.out.println(stationHardWare.getRealStartTime());
-        //System.out.println(localTime);
+            String Runtime = hours + "시간 " + minutes + "분 " + seconds + "초";
+            minutes += hours * 60;
+            chargingCarDTO.setCost(CalCost(Integer.parseInt(privateStation.getPrice()), minutes, privateStation.getChgerType()));
+            chargingCarDTO.setRuntime(Runtime);
+            chargingCarDTO.setUsingElectric(CalElectric(minutes, 6));
 
-        String Runtime = hours + "시간 " + minutes + "분 " + seconds + "초";
-        minutes += hours * 60;
-        chargingCarDTO.setCost(CalCost(Integer.parseInt(privateStation.getPrice()), minutes, privateStation.getChgerType()));
-        chargingCarDTO.setRuntime(Runtime);
-        chargingCarDTO.setUsingElectric(CalElectric(minutes, 6));
+            stationHardWare.setRealRunTime(Runtime);
+            stationHardWare.setAmountElectricity(chargingCarDTO.getUsingElectric());
+            stationHardWare.setCost(chargingCarDTO.getCost());
 
-        stationHardWare.setRealRunTime(Runtime);
-        stationHardWare.setAmountElectricity(chargingCarDTO.getUsingElectric());
-        stationHardWare.setCost(chargingCarDTO.getCost());
-
-        return chargingCarDTO;
+            return chargingCarDTO;
+        }
     }
 
     public double CalCost(int ChargingCost, long Min, String power){

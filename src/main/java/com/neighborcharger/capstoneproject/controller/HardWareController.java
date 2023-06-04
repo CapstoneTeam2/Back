@@ -53,6 +53,7 @@ public class HardWareController {
     @GetMapping("/ChargingCar/{id}") // 충전중 이용자에게 줄 정보
     private ChargingCarDTO ChargingCar(@PathVariable String id) throws ParseException {
         UserEntity userEntity = userService.User_get(id);
+        System.out.println(userEntity.getNickname());
         ChargingCarDTO chargingCarDTO = hardwareservice.ChargingCar(userEntity);
         return chargingCarDTO;
     }
