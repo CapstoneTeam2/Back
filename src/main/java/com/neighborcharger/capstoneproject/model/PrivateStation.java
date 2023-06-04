@@ -69,6 +69,9 @@ public class PrivateStation {
     private String note;
 
     @Column
+    private boolean isOn; // 지금 충전소 운영여부
+
+    @Column
     private String component;
 
     @Column
