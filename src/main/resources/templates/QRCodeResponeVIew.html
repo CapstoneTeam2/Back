@@ -28,10 +28,10 @@
         <p>현재까지의 충전 시간: <span th:text="${RealRunTime}"></span></p>
         <p>현재까지의 충전 비용: <span th:text="${cost}"></span></p>
     </div>
-    <div th:if="${RealStartTime != null and RealEndTime != null}">
+    <div th:if="${RealRunTime == null and cost == null}">
         <h1>충전을 시작합니다!</h1>
-        <p>충전 시작 시간: <span th:text="${RealStartTime}"></span></p>
-        <p>충전 예상 종료 시간: <span th:text="${RealEndTime}"></span></p>
+<!--        <p>충전 시작 시간: <span th:text="${RealStartTime}"></span></p>-->
+<!--        <p>충전 예상 종료 시간: <span th:text="${RealEndTime}"></span></p>-->
         <h1>자세한 정보는 앱을 확인해보세요!</h1>
     </div>
 

@@ -28,6 +28,7 @@ public class hardwareService {
     @Autowired
     DB_Repository_private db_repository_private;
 
+    @Autowired
     Reservation_Service reservation_service;
 
     public StationHardWare findstationHardWare(String reservaionPerson){
