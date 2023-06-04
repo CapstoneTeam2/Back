@@ -8,6 +8,8 @@ import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.service.*;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -39,7 +41,6 @@ public class ReservationController {
                 "충전기 예약이 있습니다.");
         return "전기차 충전요청";
     }*/
-
     /*@GetMapping("/Response/{FCM_Token}/{choice}")
     private String Response_Charge(@PathVariable String FCM_Token, @PathVariable int choice) throws IOException {
         if(choice == 1)firebaseCloudMessageService.sendMessageTo(FCM_Token, "이웃집 충전기", "요청이 수락되었습니다.");
@@ -70,7 +71,7 @@ public class ReservationController {
         reservation_info.setEnd_time(endTime);
 
         reservationService.Time_Reservation_service(reservation_info, reservationDTO.getStationName());
-        userService.insertReservation(returnToken, reservation_info);
+        userService.insertReservation(reservationDTO.getReservationPerson(), reservation_info);
         firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time().toString(), reservation_info.getEnd_time().toString(), "예약");
 
         return "시간 저장 -> 요청 보냄";
@@ -102,8 +103,8 @@ public class ReservationController {
     }
 
     @GetMapping("/ReservationTimeInfo/{stationName}") // 이 충전소의 예약 되어 있는 시간 GET
-    public List<LocalDateTime> reservationList(@PathVariable String stationName){
-        List<LocalDateTime> dateTimes = reservationService.reservationLists(stationName);
+    public List<Pair<String, String>> reservationList(@PathVariable String stationName){
+        List<Pair<String, String>> dateTimes = reservationService.reservationLists(stationName);
         return dateTimes;
     }
 
@@ -113,13 +114,12 @@ public class ReservationController {
         return result;
     }
 
-    @PostMapping("/PredictCostandTime/")
+    @PostMapping("/PredictCostandTime")
     public PredictResDTO predictCostandTime(@RequestBody PredictReqDTO predictReqDTO){
         double capacity = carservices.findCapacity(predictReqDTO.getCarmodelname());
        PredictResDTO predictResDTO = reservationService.prediccostandtime(capacity, predictReqDTO.getWantpercent(), predictReqDTO.getStationcost(), predictReqDTO.getPower());
         return predictResDTO;
     }
-
     @PostMapping("/insertCar")
     public String insertCar(){
         carservices.InsertCar();

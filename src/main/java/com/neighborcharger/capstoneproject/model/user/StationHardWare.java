@@ -38,9 +38,6 @@ public class StationHardWare {
     String ChgerState; // 충전중 or 충전안되는중
 
     @Column
-    String TargetPercent; // 목표 퍼센트
-
-    @Column
     double cost;
 
     @Column

@@ -66,6 +66,9 @@ dependencies {
     // okhttp
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
     implementation 'org.quartz-scheduler:quartz:2.3.2'
+
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
+
 }
 
 tasks.named('test') {

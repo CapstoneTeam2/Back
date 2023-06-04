@@ -244,8 +244,8 @@ public class UserService {
     }
 
     @Transactional
-    public void insertReservation(String token, Reservation_info reservation_info){
-        UserEntity userEntity = reservationUserRepository.findByfirebaseToken(token).orElseGet(UserEntity::new);
+    public void insertReservation(String name, Reservation_info reservation_info){
+        UserEntity userEntity = reservationUserRepository.findBynickname(name).orElseGet(UserEntity::new);
         userEntity.getReservations().add(reservation_info);
     }
 

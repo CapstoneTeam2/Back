@@ -10,6 +10,7 @@ import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,7 +34,8 @@ public class Reservation_Service {
         PrivateStation privateStation = db_repository_private.findBystatNM(name).orElseGet(PrivateStation::new);
 
         reservation_info.setChecking("대기");
-
+        System.out.println("################"+privateStation.getStatNM());
+        System.out.println("################"+reservation_info.getStatNM());
         privateStation.getReservations().add(reservation_info);
         reservation_repository.save(reservation_info);
     }
@@ -62,12 +64,13 @@ public class Reservation_Service {
 
     }
 
-    public List<LocalDateTime> reservationLists(String stationName) {
+    public List<Pair<String, String>> reservationLists(String stationName) {
         PrivateStation privateStation = db_repository_private.findBystatNM(stationName).orElseGet(PrivateStation::new);
-        List<LocalDateTime> list = new ArrayList<>();
+        List<Pair<String, String>> list = new ArrayList<>();
         for(Reservation_info reservationInfo : privateStation.getReservations()){
-            list.add(reservationInfo.getStart_time());
-            list.add(reservationInfo.getEnd_time());
+            Pair<String, String> pair = Pair.of(reservationInfo.getStart_time().toString(), reservationInfo.getEnd_time().toString());
+
+            list.add(pair);
         }
         return list;
     }

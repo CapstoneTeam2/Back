@@ -43,4 +43,7 @@ public class Reservation_info {
 
     @Column
     private boolean isReviewed;
+
+    @Column
+    private double wantpercent;
 }

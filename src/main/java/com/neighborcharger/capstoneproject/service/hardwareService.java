@@ -37,19 +37,17 @@ public class hardwareService {
         StationHardWare stationHardWare = hardwareRepository.findBynickname(reservaionPerson).orElseGet(StationHardWare::new);
         return stationHardWare;
     }
-    @Transactional
-    public String startSetting(StationHardWare stationHardWare){
-
-        LocalDateTime localDateTime = LocalDateTime.now();
-        stationHardWare.setRealStartTime(localDateTime);
-        System.out.println("#########"+localDateTime);
-        hardwareRepository.save(stationHardWare);
-        Reservation_info reservation_info = reservation_repository.findByreservationperson(stationHardWare.getNickname()).orElseGet(()->{
-            return new Reservation_info();
-        });
-        reservation_info.setStationHardWare(stationHardWare);
-        return "충전 시작";
-    }
+//    @Transactional
+//    public String startSetting(StationHardWare stationHardWare){
+//
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//        stationHardWare.setRealStartTime(localDateTime);
+//        System.out.println("#########"+localDateTime);
+//        hardwareRepository.save(stationHardWare);
+//        Reservation_info reservation_info = reservation_repository.findByreservationperson(stationHardWare.getNickname()).orElseGet(Reservation_info::new);
+//        reservation_info.setStationHardWare(stationHardWare);
+//        return "충전 시작";
+//    }
 
     @Transactional
     public void endCharging(StationHardWare stationHardWare){
@@ -61,11 +59,22 @@ public class hardwareService {
         StationHardWare stationHardWare = new StationHardWare();
 
         for(Reservation_info reservation_info : userEntity.getReservations()){
-            if(reservation_info.getStationHardWare().getChgerState().equals("충전중")){
+
+            if(reservation_info.getStationHardWare()!= null && reservation_info.getStationHardWare().getChgerState().equals("충전중")){
                 stationHardWare = reservation_info.getStationHardWare();
+                break;
             }
         }
         ChargingCarDTO chargingCarDTO = new ChargingCarDTO();
+
+        if(stationHardWare.getChgerState() == null) {
+            chargingCarDTO.setCost(0);
+            chargingCarDTO.setUsingElectric(0);
+            chargingCarDTO.setRuntime("NO");
+
+            return chargingCarDTO;
+        }
+
         LocalDateTime localDateTime = LocalDateTime.now();
         Duration duration = Duration.between(stationHardWare.getRealStartTime(), localDateTime);
         PrivateStation privateStation = db_repository_private.findBystatNM(stationHardWare.getStatNM()).orElseGet(PrivateStation::new);
@@ -97,14 +106,31 @@ public class hardwareService {
         return Min * power / 60.0;
     }
 
+    @Transactional
     public void qrStart(PrivateStation privateStation) {
         LocalDateTime ldt = LocalDateTime.now();
+        Reservation_info reservation_info1 = new Reservation_info();
+        StationHardWare stationHardWare = new StationHardWare();
+
+        System.out.println("###########로그2 : 프라이빗 스테이션 문제? " + privateStation.getOwnerName());
+
         for(Reservation_info reservation_info : privateStation.getReservations()){
             boolean isBetween = reservation_info.getStart_time().isBefore(ldt) && ldt.isBefore(reservation_info.getEnd_time());
             if(isBetween){
-                startSetting(reservation_info.getStationHardWare());
+                reservation_info1 = reservation_info;
                 break;
             }
         }
+
+        System.out.println("#############문제의 라인 전" + privateStation.getStatNM());
+
+        stationHardWare.setChgerState("충전중");
+        stationHardWare.setRealStartTime(ldt);
+        stationHardWare.setNickname(reservation_info1.getReservationperson());
+        stationHardWare.setCost(0);
+        stationHardWare.setStatNM(privateStation.getStatNM());
+
+        hardwareRepository.save(stationHardWare);
+        reservation_info1.setStationHardWare(stationHardWare);
     }
 }

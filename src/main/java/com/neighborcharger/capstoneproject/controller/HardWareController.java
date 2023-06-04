@@ -13,6 +13,7 @@ import com.neighborcharger.capstoneproject.service.hardwareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Column;
@@ -32,18 +33,22 @@ public class HardWareController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/StartSetting") // 충전 시작
-    private String StartSetting(@RequestBody StationHardWare stationHardWare){
-        hardwareservice.startSetting(stationHardWare);
-        return "시작!";
-    }
+//    @PostMapping("/StartSetting") // 충전 시작
+//    private String StartSetting(@RequestBody StationHardWare stationHardWare){
+//        hardwareservice.startSetting(stationHardWare);
+//        return "시작!";
+//    }
 
-    @PostMapping("/QRstationinfomation/{stationName}")
-    private String QRStart(String stationname){
-        PrivateStation privateStation = db_service.privateStation_fillter_get(stationname);
-        hardwareservice.qrStart(privateStation);
-        return "QR 스캔";
-    }
+//    @GetMapping("/QRstationinfomation/{stationName}")
+//    private String QRStart(@PathVariable String stationName){
+//        PrivateStation privateStation = db_service.privateStation_fillter_get(stationName);
+//
+//        System.out.println("#############로그 : " + stationName + "########큐알 코드 후");
+//
+//        hardwareservice.qrStart(privateStation);
+//
+//        return "QRCodeResponeVIew";
+//    }
 
     @GetMapping("/ChargingCar/{id}") // 충전중 이용자에게 줄 정보
     private ChargingCarDTO ChargingCar(@PathVariable String id) throws ParseException {
