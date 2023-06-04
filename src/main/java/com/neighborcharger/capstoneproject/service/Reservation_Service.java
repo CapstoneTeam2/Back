@@ -1,23 +1,23 @@
 package com.neighborcharger.capstoneproject.service;
 
-import com.google.api.client.util.DateTime;
 import com.neighborcharger.capstoneproject.DTO.PredictResDTO;
+import com.neighborcharger.capstoneproject.model.user.StationHardWare;
 import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
+import com.neighborcharger.capstoneproject.repository.HardwareRepository;
 import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
 import com.neighborcharger.capstoneproject.repository.Reservation_Repository;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class Reservation_Service {
@@ -25,6 +25,9 @@ public class Reservation_Service {
     Reservation_Repository reservation_repository;
     @Autowired
     DB_Repository_private db_repository_private;
+
+    @Autowired
+    HardwareRepository hardwareRepository;
 
     @Autowired
     ReservationUserRepository reservationUserRepository;
@@ -104,5 +107,29 @@ public class Reservation_Service {
         predictResDTO.setPredictime(preTime);
         System.out.println(predictResDTO);
         return predictResDTO;
+    }
+
+
+    // 충전소 이름으로 예약 내역에서 예약자를 찾아내고
+    // 예약자 이름이나 관련 정보로 하드웨어에서 충전 중 가격, 충전 중 시간 받기
+    public StationHardWare findChargingPriceAndTime(PrivateStation privateStation){
+        LocalDateTime ldt = LocalDateTime.now();
+        Reservation_info findReservation = new Reservation_info();
+
+        for(Reservation_info reservation_info : privateStation.getReservations()){
+            boolean isBetween = reservation_info.getStart_time().isBefore(ldt) && ldt.isBefore(reservation_info.getEnd_time());
+            if(isBetween) {
+                findReservation = reservation_info;
+                break;
+            }
+        }
+
+        String reservationPersonName = findReservation.getReservationperson();
+
+        StationHardWare isChargingInform =  hardwareRepository.findBynickname(reservationPersonName).get();
+
+        return isChargingInform;
+
+
     }
 }

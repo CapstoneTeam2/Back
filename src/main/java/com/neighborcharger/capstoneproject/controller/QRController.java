@@ -1,7 +1,9 @@
 package com.neighborcharger.capstoneproject.controller;
 
 import com.neighborcharger.capstoneproject.model.PrivateStation;
+import com.neighborcharger.capstoneproject.model.user.StationHardWare;
 import com.neighborcharger.capstoneproject.service.DB_Service;
+import com.neighborcharger.capstoneproject.service.Reservation_Service;
 import com.neighborcharger.capstoneproject.service.UserService;
 import com.neighborcharger.capstoneproject.service.hardwareService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +23,26 @@ public class QRController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    Reservation_Service reservation_service;
+
 
     @GetMapping("/QRstationinfomation/{stationName}")
-    private String QRStart(@PathVariable String stationName){
+    private String QRStart(@PathVariable String stationName, Model model){
         PrivateStation privateStation = db_service.privateStation_fillter_get(stationName);
 
         System.out.println("#############로그 : " + stationName + "########큐알 코드 후");
 
-        hardwareservice.qrStart(privateStation);
+        StationHardWare statHW = hardwareservice.qrConnect(privateStation);
+
+        if(statHW != null){ // 지금 충전 중이라면
+            model.addAttribute("RealRunTime", statHW.getRealRunTime());
+            model.addAttribute("cost", statHW.getCost());
+
+        } else{
+            model.addAttribute("RealStartTime", statHW.getRealStartTime());
+            model.addAttribute("RealEndTime", statHW.getRealEndTime());
+        }
 
         return "QRCodeResponeVIew";
     }

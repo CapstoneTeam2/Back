@@ -147,4 +147,13 @@ public class DB_Controller {
         PrivateStation privateStation = db_service.privateStationfindOwner(username);
         return privateStation.getReservations();
     }
+
+    @GetMapping("/privateStat/{statNM}/{isOn}")
+    public String isOnPrivateStat(@PathVariable String statNM, @PathVariable boolean isOn){
+        PrivateStation privateStation = db_service.privateStation_fillter_get(statNM);
+        privateStation.setOn(isOn);
+
+        return "충전소 운영" + isOn;
+
+    }
 }
