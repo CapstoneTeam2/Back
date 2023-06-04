@@ -8,18 +8,13 @@ import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
 import com.neighborcharger.capstoneproject.repository.HardwareRepository;
 import com.neighborcharger.capstoneproject.repository.Reservation_Repository;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class hardwareService {
@@ -32,6 +27,8 @@ public class hardwareService {
 
     @Autowired
     DB_Repository_private db_repository_private;
+
+    Reservation_Service reservation_service;
 
     public StationHardWare findstationHardWare(String reservaionPerson){
         StationHardWare stationHardWare = hardwareRepository.findBynickname(reservaionPerson).orElseGet(StationHardWare::new);
@@ -107,30 +104,37 @@ public class hardwareService {
     }
 
     @Transactional
-    public void qrStart(PrivateStation privateStation) {
+    public StationHardWare qrConnect(PrivateStation privateStation) {
         LocalDateTime ldt = LocalDateTime.now();
         Reservation_info reservation_info1 = new Reservation_info();
-        StationHardWare stationHardWare = new StationHardWare();
 
         System.out.println("###########로그2 : 프라이빗 스테이션 문제? " + privateStation.getOwnerName());
 
         for(Reservation_info reservation_info : privateStation.getReservations()){
             boolean isBetween = reservation_info.getStart_time().isBefore(ldt) && ldt.isBefore(reservation_info.getEnd_time());
-            if(isBetween){
+            if (isBetween) {
                 reservation_info1 = reservation_info;
                 break;
             }
         }
 
-        System.out.println("#############문제의 라인 전" + privateStation.getStatNM());
+        if (reservation_info1.getStationHardWare() == null){ //처음 qr 찍었을 경우
+            StationHardWare stationHardWare = new StationHardWare();
+            stationHardWare.setChgerState("충전중");
+            stationHardWare.setRealStartTime(ldt);
+            stationHardWare.setNickname(reservation_info1.getReservationperson());
+            stationHardWare.setCost(0);
+            stationHardWare.setStatNM(privateStation.getStatNM());
 
-        stationHardWare.setChgerState("충전중");
-        stationHardWare.setRealStartTime(ldt);
-        stationHardWare.setNickname(reservation_info1.getReservationperson());
-        stationHardWare.setCost(0);
-        stationHardWare.setStatNM(privateStation.getStatNM());
+            hardwareRepository.save(stationHardWare);
+            reservation_info1.setStationHardWare(stationHardWare);
+            return null;
 
-        hardwareRepository.save(stationHardWare);
-        reservation_info1.setStationHardWare(stationHardWare);
+        } else{ // 충전 중일 경우
+            StationHardWare statHw = reservation_service.findChargingPriceAndTime(privateStation);
+            return statHw;
+        }
+
+
     }
 }
