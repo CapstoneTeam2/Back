@@ -34,14 +34,16 @@ public class QRController {
         System.out.println("#############로그 : " + stationName + "########큐알 코드 후");
 
         StationHardWare statHW = hardwareservice.qrConnect(privateStation);
-
+        System.out.println("다녀옴!####################################");
         if(statHW != null){ // 지금 충전 중이라면
+            System.out.println("다왔다#################################");
             model.addAttribute("RealRunTime", statHW.getRealRunTime());
             model.addAttribute("cost", statHW.getCost());
 
         } else{
-            model.addAttribute("RealStartTime", statHW.getRealStartTime());
-            model.addAttribute("RealEndTime", statHW.getRealEndTime());
+            System.out.println("###################################처음!!!");
+            model.addAttribute("RealStartTime", "몰라");
+            model.addAttribute("RealEndTime", "몰라");
         }
 
         return "QRCodeResponeVIew";

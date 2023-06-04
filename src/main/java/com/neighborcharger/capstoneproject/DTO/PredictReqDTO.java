@@ -11,7 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PredictReqDTO {
     int wantpercent;
-    String carmodelname;
-    int stationcost;
-    String power;
+    String id;
+    String stationName;
 }
