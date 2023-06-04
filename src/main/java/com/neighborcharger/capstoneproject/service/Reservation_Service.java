@@ -45,13 +45,8 @@ public class Reservation_Service {
 
     @Transactional
     public void ReservationReject(String ReservationPerson, String owner){
-        PrivateStation privateStation = db_repository_private.findByownerName(owner).orElseGet(()->{
-            return new PrivateStation();
-        });
-
-        Reservation_info reservation_info = reservation_repository.findByreservationperson(ReservationPerson).orElseGet(()->{
-            return new Reservation_info();
-        });
+        PrivateStation privateStation = db_repository_private.findByownerName(owner).orElseGet(PrivateStation::new);
+        Reservation_info reservation_info = reservation_repository.findByreservationperson(ReservationPerson).orElseGet(Reservation_info::new);
 
 
 //         privateStation.getReservations().remove(reservation_info);
@@ -88,16 +83,21 @@ public class Reservation_Service {
     }
 
     public PredictResDTO prediccostandtime(double capacity, int percent, int cost, String Power){
-        double power = Double.parseDouble(Power);
         double charging = capacity * percent / 100;
+        System.out.println(charging);
+        double power = 0.0;
         PredictResDTO predictResDTO = new PredictResDTO();
+        hardwareService Hws = new hardwareService();
+        if (Power.equals("02")) power = 7;
+        else power = 50.0;
+
         double Times = charging / power;
         System.out.println(capacity);
         System.out.println(percent);
         System.out.println(cost);
 
         System.out.println("Times : " + Times);
-        double preCost = Times * cost;
+        double preCost = charging * cost;
         int our = (int) (charging / power);
         int min = (int) (charging % power);
         String.valueOf(preCost);

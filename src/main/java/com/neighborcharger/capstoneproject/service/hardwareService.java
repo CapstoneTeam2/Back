@@ -87,7 +87,7 @@ public class hardwareService {
             minutes += hours * 60;
             chargingCarDTO.setCost(CalCost(Integer.parseInt(privateStation.getPrice()), minutes, privateStation.getChgerType()));
             chargingCarDTO.setRuntime(Runtime);
-            chargingCarDTO.setUsingElectric(CalElectric(minutes, 6));
+            chargingCarDTO.setUsingElectric(CalElectric(minutes, privateStation.getChgerType()));
 
             stationHardWare.setRealRunTime(Runtime);
             stationHardWare.setAmountElectricity(chargingCarDTO.getUsingElectric());
@@ -98,11 +98,14 @@ public class hardwareService {
     }
 
     public double CalCost(int ChargingCost, long Min, String power){
-        if(power.equals("02")) return ChargingCost * 6 * Min / 60.0 ;
+        System.out.println(ChargingCost);
+        System.out.println(power);
+        if(power.equals("02")) return ChargingCost * 7 * Min / 60.0;
         else  return ChargingCost * 50 * Min / 60.0;
     }
-    public double CalElectric(long Min, int power){
-        return Min * power / 60.0;
+    public double CalElectric(long Min, String power){
+        if(power.equals("02")) return 7 * Min / 60.0;
+        else  return 50 * Min / 60.0;
     }
 
     @Transactional

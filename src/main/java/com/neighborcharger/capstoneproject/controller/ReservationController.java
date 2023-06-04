@@ -5,6 +5,7 @@ import com.neighborcharger.capstoneproject.DTO.PredictResDTO;
 import com.neighborcharger.capstoneproject.DTO.ReservationDTO;
 import com.neighborcharger.capstoneproject.DTO.Respone_DTO;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
+import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.service.*;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,8 +117,15 @@ public class ReservationController {
 
     @PostMapping("/PredictCostandTime")
     public PredictResDTO predictCostandTime(@RequestBody PredictReqDTO predictReqDTO){
-        double capacity = carservices.findCapacity(predictReqDTO.getCarmodelname());
-       PredictResDTO predictResDTO = reservationService.prediccostandtime(capacity, predictReqDTO.getWantpercent(), predictReqDTO.getStationcost(), predictReqDTO.getPower());
+        UserEntity userEntity = userService.User_get(predictReqDTO.getId());
+        String carmodel = userEntity.getCarType();
+        double capacity = carservices.findCapacity(carmodel);
+
+        PrivateStation privateStation = db_service.privateStation_fillter_get(predictReqDTO.getStationName());
+
+       PredictResDTO predictResDTO =
+               reservationService.prediccostandtime(capacity, predictReqDTO.getWantpercent(),
+                       Integer.parseInt(privateStation.getPrice()), privateStation.getChgerType());
         return predictResDTO;
     }
     @PostMapping("/insertCar")
