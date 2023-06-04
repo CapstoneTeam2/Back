@@ -22,6 +22,9 @@ public class RankingService {
         List<PrivateStation> allSortedList = db_repository_private
                 .findAll(Sort.by(Sort.Direction.ASC, "price"));
 
+        System.out.println("이제 리스트 나와야돼");
+        System.out.println(allSortedList);
+
         List<PrivateStation> sortedByPricePrivateStatList = new ArrayList<>();
 
         for (PrivateStation privateStation : allSortedList){
