@@ -52,6 +52,11 @@ public class DB_Controller {
         return db_service.publicStationList(chgerType);
     }
 
+    @GetMapping("/privateStat/isCharging")
+    public List<PrivateStation> privateStatIsCharging(){
+        return db_service.privateStatIsCharging();
+    }
+
     @GetMapping("/Private_Station/myStation/{id}")
     public PrivateStation privateStationMy(@PathVariable String id){
         return db_service.privateStaionMy(id);

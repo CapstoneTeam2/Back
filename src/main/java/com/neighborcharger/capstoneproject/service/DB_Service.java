@@ -2,13 +2,11 @@ package com.neighborcharger.capstoneproject.service;
 
 import com.google.api.client.util.DateTime;
 import com.neighborcharger.capstoneproject.model.Reservation_info;
+import com.neighborcharger.capstoneproject.model.user.StationHardWare;
 import com.neighborcharger.capstoneproject.model.user.UserEntity;
-import com.neighborcharger.capstoneproject.repository.DB_Repository;
-import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
+import com.neighborcharger.capstoneproject.repository.*;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.PublicStation;
-import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
-import com.neighborcharger.capstoneproject.repository.Reservation_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +20,9 @@ public class DB_Service {
     private DB_Repository db_repository;
     @Autowired
     private DB_Repository_private db_repository_private;
+
+    @Autowired
+    private HardwareRepository hardwareRepository;
 
     @Autowired
     private ReservationUserRepository reservationUserRepository;
@@ -50,7 +51,20 @@ public class DB_Service {
             }
         }
         db_repository_private.save(privateStation);
+    }
 
+    @Transactional
+    public List<PrivateStation> privateStatIsCharging(){
+        List<StationHardWare> hardWareList = hardwareRepository.findAll();
+        List<PrivateStation> isChrgingList = new ArrayList<>();
+        for(StationHardWare hardWare : hardWareList){
+            if(hardWare.getChgerState().equals("충전중")){
+                PrivateStation privateStat = db_repository_private.findBystatNM(hardWare.getStatNM()).orElse(null);
+                isChrgingList.add(privateStat);
+            }
+        }
+
+        return isChrgingList;
     }
 
     @Transactional
