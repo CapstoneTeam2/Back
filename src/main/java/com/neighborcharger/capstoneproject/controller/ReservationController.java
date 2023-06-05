@@ -81,7 +81,7 @@ public class ReservationController {
     @PostMapping("/Reservation_Respone")
     private String Reservation_Respone(@RequestBody Respone_DTO respone_dto) throws IOException {
         if(respone_dto.getChoice() == 1) {
-            firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "응답");
+            firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "수락");
             PrivateStation privateStation = db_service.privateStation_fillter_get(respone_dto.getStation_name());
             for(Reservation_info reservation_info : privateStation.getReservations()){
                 if(reservation_info.getStatNM().equals(respone_dto.getStation_name())){
@@ -91,7 +91,7 @@ public class ReservationController {
             }
         }
         else {
-            firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 거절되었어요", "응답");
+            firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 거절되었어요", "거절");
             PrivateStation privateStation = db_service.privateStation_fillter_get(respone_dto.getStation_name());
             for(Reservation_info reservation_info : privateStation.getReservations()){
                 if(reservation_info.getStatNM().equals(respone_dto.getStation_name())){
