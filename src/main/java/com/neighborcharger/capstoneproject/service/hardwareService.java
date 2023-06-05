@@ -7,6 +7,7 @@ import com.neighborcharger.capstoneproject.model.user.StationHardWare;
 import com.neighborcharger.capstoneproject.model.user.UserEntity;
 import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
 import com.neighborcharger.capstoneproject.repository.HardwareRepository;
+import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
 import com.neighborcharger.capstoneproject.repository.Reservation_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Service
 public class hardwareService {
@@ -27,6 +30,9 @@ public class hardwareService {
 
     @Autowired
     DB_Repository_private db_repository_private;
+
+    @Autowired
+    ReservationUserRepository reservationUserRepository;
 
     @Autowired
     Reservation_Service reservation_service;
@@ -123,11 +129,63 @@ public class hardwareService {
             }
         }
 
+        UserEntity reservationPerson = reservationUserRepository.findBynickname(reservation_info1.getReservationperson()).orElse(null);
+
         if (reservation_info1.getStationHardWare() == null){ //처음 qr 찍었을 경우
             System.out.println(reservation_info1.getStatNM()+"###############################3");
             StationHardWare stationHardWare = new StationHardWare();
             stationHardWare.setChgerState("충전중");
             stationHardWare.setRealStartTime(ldt);
+
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+//                @Transactional
+                public void run() {
+
+                    //RealEndTime 업데이트
+                    LocalDateTime now = LocalDateTime.now();
+                    stationHardWare.setRealEndTime(now);
+
+                    //Cost 비용 업데이트
+
+                        Duration duration = Duration.between(stationHardWare.getRealStartTime(), now);
+
+                        long hours = duration.toHours();
+                        long minutes = duration.toMinutesPart();
+                        long seconds = duration.toSecondsPart();
+
+                        //System.out.println(stationHardWare.getRealStartTime());
+                        //System.out.println(localTime);
+
+                        String Runtime = hours + "시간 " + minutes + "분 " + seconds + "초";
+                        minutes += hours * 60;
+                        double cost = CalCost(Integer.parseInt(privateStation.getPrice()), minutes, privateStation.getChgerType());
+
+                        double usingElectric = CalElectric(minutes, privateStation.getChgerType());
+
+                        stationHardWare.setRealRunTime(Runtime);
+                        stationHardWare.setAmountElectricity(usingElectric);
+                        stationHardWare.setCost(cost);
+                        System.out.println("비용 업데이트");
+
+
+                    System.out.println(stationHardWare.getStatNM() + "****" + stationHardWare.getCost() + '원');
+                    stationHardWare.setChgerState("충전끝");
+                    System.out.println("충전 끝났지로오오오오옹###ㅏㅓ#ㅓ%ㅏ#ㅓ%ㅓ#%ㅏㅓ%");
+
+                    // MySQL에 변경된 객체를 저장
+                    hardwareRepository.save(stationHardWare);
+                }
+            };
+
+            LocalDateTime startTime = reservation_info1.getStart_time();
+            LocalDateTime endTime = reservation_info1.getEnd_time();
+
+            Duration duration = Duration.between(startTime, endTime);
+            long minutes = duration.toMinutes();
+            timer.schedule(task, 60000 * minutes);
+
             stationHardWare.setNickname(reservation_info1.getReservationperson());
             stationHardWare.setCost(0);
             stationHardWare.setStatNM(privateStation.getStatNM());
