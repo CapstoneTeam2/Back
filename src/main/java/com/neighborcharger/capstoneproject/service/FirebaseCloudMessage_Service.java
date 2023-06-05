@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.net.HttpHeaders;
+import com.neighborcharger.capstoneproject.model.FcmAcceptMessage;
+import com.neighborcharger.capstoneproject.model.FcmEndMessage;
 import com.neighborcharger.capstoneproject.model.FcmMessage;
 import com.neighborcharger.capstoneproject.model.FcmResponesMessage;
 import lombok.Builder;
@@ -22,8 +24,8 @@ public class FirebaseCloudMessage_Service {
     // "https://fcm.googleapis.com/v1/projects/fcm-server-b7e93/messages:send";
     private final ObjectMapper objectMapper;
 
-    public void sendMessageTo(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking) throws IOException {
-        String message = makeMessage(targetToken, title, body, returnToken, startTime, endTime, checking);
+    public void sendMessageTo(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking, String addr) throws IOException {
+        String message = makeMessage(targetToken, title, body, returnToken, startTime, endTime, checking, addr);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
@@ -39,7 +41,7 @@ public class FirebaseCloudMessage_Service {
 
         System.out.println(response.body().string());
     }
-    private String makeMessage(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking) throws JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking, String addr) throws JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
@@ -54,6 +56,7 @@ public class FirebaseCloudMessage_Service {
                                         .startTime(startTime)
                                         .endTime(endTime)
                                         .checking(checking)
+                                        .addr(addr)
                                         .build()
                         )
                         .build()
@@ -102,6 +105,86 @@ public class FirebaseCloudMessage_Service {
         return objectMapper.writeValueAsString(fcmMessage);
     }
 
+    public void sendEndMessage(String targetToken, String title, String body, String checking, String Cost, String Times) throws IOException {
+        String message = makeEndMessage(targetToken, title, body, checking, Cost, Times);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request)
+                .execute();
+
+        System.out.println(response.body().string());
+    }
+
+    private String makeEndMessage(String targetToken, String title, String body, String checking, String Cost, String Times) throws JsonProcessingException {
+        FcmEndMessage fcmEndMessage = FcmEndMessage.builder()
+                .message(FcmEndMessage.Message.builder()
+                        .token(targetToken)
+                        .notification(FcmEndMessage.Notification.builder()
+                                .title(title)
+                                .body(body)
+                                .image(null)
+                                .build()
+                        ).data(
+                                FcmEndMessage.Data.builder()
+                                        .checking(checking)
+                                        .cost(Cost)
+                                        .times(Times)
+                                        .build()
+                        )
+                        .build()
+                )
+                .validate_only(false)
+                .build();
+        return objectMapper.writeValueAsString(fcmEndMessage);
+    }
+
+    public void  acceptMessage(String targetToken, String title, String body, String checking, String addr) throws IOException {
+        String message = makeAcceptMessage(targetToken, title, body, checking, addr);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request)
+                .execute();
+
+        System.out.println(response.body().string());
+    }
+
+    private String makeAcceptMessage(String targetToken, String title, String body, String checking, String addr) throws JsonProcessingException {
+        FcmAcceptMessage fcmAcceptMessage = FcmAcceptMessage.builder()
+                .message(FcmAcceptMessage.Message.builder()
+                        .token(targetToken)
+                        .notification(FcmAcceptMessage.Notification.builder()
+                                .title(title)
+                                .body(body)
+                                .image(null)
+                                .build()
+                        ).data(
+                                FcmAcceptMessage.Data.builder()
+                                        .checking(checking)
+                                        .addr(addr)
+                                        .build()
+                        )
+                        .build()
+                )
+                .validate_only(false)
+                .build();
+        return objectMapper.writeValueAsString(fcmAcceptMessage);
+    }
     public String getAccessToken() throws IOException {
         String firebaseConfigPath = "firebase/capstoenteam2-firebase-adminsdk-dn63g-55a95679b3.json";
                 //"firebase/fcm-server-b7e93-firebase-adminsdk-76g95-ae1f10b55b.json";

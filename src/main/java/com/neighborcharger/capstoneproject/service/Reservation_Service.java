@@ -132,7 +132,11 @@ public class Reservation_Service {
         StationHardWare isChargingInform =  hardwareRepository.findBynickname(reservationPersonName).get();
         System.out.println("너냐???#############"+isChargingInform.getRealStartTime());
         return isChargingInform;
+    }
 
+    public List<Reservation_info> stationReservation(String name){
+        PrivateStation privateStation = db_repository_private.findBystatNM(name).orElseGet(PrivateStation::new);
 
+        return privateStation.getReservations();
     }
 }

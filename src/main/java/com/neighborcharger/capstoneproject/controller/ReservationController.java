@@ -73,7 +73,8 @@ public class ReservationController {
 
         reservationService.Time_Reservation_service(reservation_info, reservationDTO.getStationName());
         userService.insertReservation(reservationDTO.getReservationPerson(), reservation_info);
-        firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time().toString(), reservation_info.getEnd_time().toString(), "예약");
+        System.out.println(reservationDTO.getStationName());
+        firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time().toString(), reservation_info.getEnd_time().toString(), "예약", reservationDTO.getStationName());
 
         return "시간 저장 -> 요청 보냄";
     }
@@ -81,7 +82,13 @@ public class ReservationController {
     @PostMapping("/Reservation_Respone")
     private String Reservation_Respone(@RequestBody Respone_DTO respone_dto) throws IOException {
         if(respone_dto.getChoice() == 1) {
-            firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "수락");
+            System.out.println("######################################################");
+            System.out.println(respone_dto.getName());
+            System.out.println(respone_dto.getStation_name());
+            System.out.println(respone_dto.getToken());
+            String addr = db_service.privateStation_fillter_get(respone_dto.getStation_name()).getAddr();
+            System.out.println(addr);
+            firebaseCloudMessageService.acceptMessage(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "수락", addr);
             PrivateStation privateStation = db_service.privateStation_fillter_get(respone_dto.getStation_name());
             for(Reservation_info reservation_info : privateStation.getReservations()){
                 if(reservation_info.getStatNM().equals(respone_dto.getStation_name())){

@@ -196,8 +196,7 @@ public class hardwareService {
                     stationHardWare.setChgerState("충전끝");
                     System.out.println("충전 끝났지로오오오오옹###ㅏㅓ#ㅓ%ㅏ#ㅓ%ㅓ#%ㅏㅓ%");
                     try {
-                        firebaseCloudMessageService.sendMessageTo2(reservationPerson.getFirebaseToken(), "이웃집 충전기", "충전이 완료되었습니다.", "끝");
-
+                        firebaseCloudMessageService.sendEndMessage(reservationPerson.getFirebaseToken(), "이웃집 충전기", "충전이 완료되었습니다.", "끝", String.valueOf(stationHardWare.getCost()), stationHardWare.getRealRunTime());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
