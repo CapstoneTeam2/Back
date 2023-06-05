@@ -8,6 +8,7 @@ import com.neighborcharger.capstoneproject.repository.DB_Repository_private;
 import com.neighborcharger.capstoneproject.model.PrivateStation;
 import com.neighborcharger.capstoneproject.model.PublicStation;
 import com.neighborcharger.capstoneproject.repository.ReservationUserRepository;
+import com.neighborcharger.capstoneproject.repository.Reservation_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class DB_Service {
     @Autowired
     private ReservationUserRepository reservationUserRepository;
 
+    @Autowired
+    private Reservation_Repository reservation_repository;
+
     @Transactional
     public void insertDB(PublicStation publicStation) {
         db_repository.save(publicStation);
@@ -36,14 +40,17 @@ public class DB_Service {
 
     @Transactional
     public void updateTotal(PrivateStation privateStation, double cost, double elect, String nickname){
-        PrivateStation privateStation1 = privateStation;
-        privateStation1.setTotalelectric(elect);
-        privateStation1.setTotalcost(cost);
-        for(Reservation_info reservation_info : privateStation1.getReservations()){
+//        PrivateStation privateStation1 = privateStation;
+        privateStation.setTotalelectric(elect);
+        privateStation.setTotalcost(cost);
+        for(Reservation_info reservation_info : privateStation.getReservations()){
             if(reservation_info.getReservationperson().equals(nickname)){ // 예약자 찾음
                 reservation_info.setChecking("충전 완료"); // 거래 완료? 충전 완료?
+                reservation_repository.save(reservation_info);
             }
         }
+        db_repository_private.save(privateStation);
+
     }
 
     @Transactional

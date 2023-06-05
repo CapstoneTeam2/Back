@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -118,12 +119,20 @@ public class hardwareService {
     public double CalCost(int ChargingCost, long Min, String power){
         System.out.println(ChargingCost);
         System.out.println(power);
-        if(power.equals("02")) return ChargingCost * 7 * Min / 60.0;
-        else  return ChargingCost * 50 * Min / 60.0;
+        double result = 0;
+        if(power.equals("02")) result = ChargingCost * 7 * Min / 60.0;
+        else  result =  ChargingCost * 50 * Min / 60.0;
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        result = Double.parseDouble(decimalFormat.format(result));
+        return result;
     }
     public double CalElectric(long Min, String power){
-        if(power.equals("02")) return 7 * Min / 60.0;
-        else  return 50 * Min / 60.0;
+        double result = 0;
+        if(power.equals("02")) result = 7 * Min / 60.0;
+        else  result = 50 * Min / 60.0;
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        result = Double.parseDouble(decimalFormat.format(result));
+        return result;
     }
 
     @Transactional
@@ -182,11 +191,12 @@ public class hardwareService {
                         stationHardWare.setCost(cost);
                         System.out.println("비용 업데이트");
 
+
                     System.out.println(stationHardWare.getStatNM() + "****" + stationHardWare.getCost() + '원');
                     stationHardWare.setChgerState("충전끝");
                     System.out.println("충전 끝났지로오오오오옹###ㅏㅓ#ㅓ%ㅏ#ㅓ%ㅓ#%ㅏㅓ%");
                     try {
-                        firebaseCloudMessageService.sendMessageTo2(reservationPerson.getFirebaseToken(), "이웃집 충전기", "충전이 완료되었습니다.", "응답");
+                        firebaseCloudMessageService.sendMessageTo2(reservationPerson.getFirebaseToken(), "이웃집 충전기", "충전이 완료되었습니다.", "끝");
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
