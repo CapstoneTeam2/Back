@@ -229,6 +229,11 @@ public class UserService {
         return userEntity;
     }
 
+    public UserEntity User_get_usingname(String name){
+        UserEntity userEntity = reservationUserRepository.findBynickname(name).orElseGet(UserEntity::new);
+        return userEntity;
+    }
+
     public List<Reservation_info> getReservation(String id){
         UserEntity userEntity = reservationUserRepository.findByid(id).orElseGet(UserEntity::new);
         return userEntity.getReservations();

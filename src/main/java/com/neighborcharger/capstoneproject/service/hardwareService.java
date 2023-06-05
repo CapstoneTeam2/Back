@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,6 +38,15 @@ public class hardwareService {
 
     @Autowired
     Reservation_Service reservation_service;
+
+    @Autowired
+    FirebaseCloudMessage_Service firebaseCloudMessageService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    DB_Service db_service;
 
     public StationHardWare findstationHardWare(String reservaionPerson){
         StationHardWare stationHardWare = hardwareRepository.findBynickname(reservaionPerson).orElseGet(StationHardWare::new);
@@ -99,6 +110,7 @@ public class hardwareService {
             stationHardWare.setAmountElectricity(chargingCarDTO.getUsingElectric());
             stationHardWare.setCost(chargingCarDTO.getCost());
 
+
             return chargingCarDTO;
         }
     }
@@ -136,7 +148,8 @@ public class hardwareService {
             StationHardWare stationHardWare = new StationHardWare();
             stationHardWare.setChgerState("충전중");
             stationHardWare.setRealStartTime(ldt);
-
+            System.out.println(reservation_info1.getReservationperson());
+            System.out.println(reservationPerson.getNickname());
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
@@ -169,13 +182,18 @@ public class hardwareService {
                         stationHardWare.setCost(cost);
                         System.out.println("비용 업데이트");
 
-
                     System.out.println(stationHardWare.getStatNM() + "****" + stationHardWare.getCost() + '원');
                     stationHardWare.setChgerState("충전끝");
                     System.out.println("충전 끝났지로오오오오옹###ㅏㅓ#ㅓ%ㅏ#ㅓ%ㅓ#%ㅏㅓ%");
+                    try {
+                        firebaseCloudMessageService.sendMessageTo2(reservationPerson.getFirebaseToken(), "이웃집 충전기", "충전이 완료되었습니다.", "응답");
 
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     // MySQL에 변경된 객체를 저장
                     hardwareRepository.save(stationHardWare);
+                    db_service.updateTotal(privateStation, cost, usingElectric, reservationPerson.getNickname());
                 }
             };
 
@@ -184,7 +202,7 @@ public class hardwareService {
 
             Duration duration = Duration.between(startTime, endTime);
             long minutes = duration.toMinutes();
-            timer.schedule(task, 60000 * minutes);
+            timer.schedule(task, 60000 );
 
             stationHardWare.setNickname(reservation_info1.getReservationperson());
             stationHardWare.setCost(0);
