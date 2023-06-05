@@ -120,7 +120,6 @@ public class ReservationController {
         UserEntity userEntity = userService.User_get(predictReqDTO.getId());
         String carmodel = userEntity.getCarType();
         double capacity = carservices.findCapacity(carmodel);
-
         PrivateStation privateStation = db_service.privateStation_fillter_get(predictReqDTO.getStationName());
 
        PredictResDTO predictResDTO =

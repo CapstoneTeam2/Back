@@ -12,14 +12,14 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     #url : jdbc:mysql://neighborcharger.cmobwlvkrcpm.ap-northeast-2.rds.amazonaws.com:3306/neighborcharger?serverTimezone=Asia/Seoul
-    url: jdbc:mysql://115.85.183.243:3306/team?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/team?serverTimezone=Asia/Seoul
 
     #url : jdbc:mysql://115.85.183.243:3306/team?serverTimezone=Asia/Seoul
     #    url: jdbc:mysql://localhost:3306/team?serverTimezone=Asia/Seoul
 
     #    username: cho
     #    password: hee6455
-    username : spring
+    username : cho
     password : hee6455
     #username : admin
     #password : team2nc!
@@ -52,7 +52,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false
