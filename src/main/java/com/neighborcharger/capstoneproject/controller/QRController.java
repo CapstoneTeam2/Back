@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -50,15 +51,23 @@ public class QRController {
             // 선택된 개인충전소의 예약 목록에서 충전중인 것을 찾고, 그것의 endTime을 가져오자
             Reservation_info findReservationInfo = new Reservation_info();
             List<Reservation_info> reservationInfoList = privateStation.getReservations();
+
+            System.out.println(reservationInfoList.size() + ":::::::: 예약 개수");
+
+
             for(Reservation_info reservation_info : reservationInfoList){
-                if (reservation_info.getChecking() == "대기" || reservation_info.getChecking() == "수락"){
-                    findReservationInfo = reservation_info;
+                System.out.println(reservation_info.getEnd_time() + "ㅁㅁㅁㅁㅁㅁㅁ끝나는 시간ㅁ 예약정보 하나");
+                System.out.println(reservation_info.getChecking() + "::::::이게 나와야되는데?");
+                if (reservation_info.getChecking().equals("대기") || reservation_info.getChecking().equals("수락")){
+                    System.out.println(reservation_info.getStart_time() + "***** 이때 시작함");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                    String formattedTime = reservation_info.getEnd_time().format(formatter);
+                    model.addAttribute("end_time", formattedTime);
+                    System.out.println(reservation_info.getEnd_time() + "시간이 여깃어용");
                 }
             }
 
-            System.out.println(findReservationInfo.getStart_time() + "***** 이때 시작함");
-            model.addAttribute("end_time", findReservationInfo.getEnd_time());
-            System.out.println(findReservationInfo.getEnd_time() + "시간이 여깃어용");
+
         }
 
         return "QRCodeResponeVIew";
