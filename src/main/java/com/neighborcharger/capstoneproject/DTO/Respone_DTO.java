@@ -12,7 +12,7 @@ import lombok.Setter;
 public class Respone_DTO {
     String token;
     String Name; // 예약자이름
-    String Station_name; // 충전소이름
+    String station_name; // 충전소이름
     String check;
     int choice;
 }

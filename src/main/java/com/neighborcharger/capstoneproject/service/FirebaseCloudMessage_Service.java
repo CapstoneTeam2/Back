@@ -24,8 +24,9 @@ public class FirebaseCloudMessage_Service {
     // "https://fcm.googleapis.com/v1/projects/fcm-server-b7e93/messages:send";
     private final ObjectMapper objectMapper;
 
-    public void sendMessageTo(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking, String addr) throws IOException {
-        String message = makeMessage(targetToken, title, body, returnToken, startTime, endTime, checking, addr);
+    public void sendMessageTo(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking, String address
+    ) throws IOException {
+        String message = makeMessage(targetToken, title, body, returnToken, startTime, endTime, checking, address);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
@@ -41,7 +42,7 @@ public class FirebaseCloudMessage_Service {
 
         System.out.println(response.body().string());
     }
-    private String makeMessage(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking, String addr) throws JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking, String address) throws JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
@@ -56,7 +57,7 @@ public class FirebaseCloudMessage_Service {
                                         .startTime(startTime)
                                         .endTime(endTime)
                                         .checking(checking)
-                                        .addr(addr)
+                                        .address(address)
                                         .build()
                         )
                         .build()
@@ -146,8 +147,8 @@ public class FirebaseCloudMessage_Service {
         return objectMapper.writeValueAsString(fcmEndMessage);
     }
 
-    public void  acceptMessage(String targetToken, String title, String body, String checking, String addr) throws IOException {
-        String message = makeAcceptMessage(targetToken, title, body, checking, addr);
+    public void  acceptMessage(String targetToken, String title, String body, String checking, String address) throws IOException {
+        String message = makeAcceptMessage(targetToken, title, body, checking, address);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
@@ -164,7 +165,7 @@ public class FirebaseCloudMessage_Service {
         System.out.println(response.body().string());
     }
 
-    private String makeAcceptMessage(String targetToken, String title, String body, String checking, String addr) throws JsonProcessingException {
+    private String makeAcceptMessage(String targetToken, String title, String body, String checking, String address) throws JsonProcessingException {
         FcmAcceptMessage fcmAcceptMessage = FcmAcceptMessage.builder()
                 .message(FcmAcceptMessage.Message.builder()
                         .token(targetToken)
@@ -176,7 +177,7 @@ public class FirebaseCloudMessage_Service {
                         ).data(
                                 FcmAcceptMessage.Data.builder()
                                         .checking(checking)
-                                        .addr(addr)
+                                        .address(address)
                                         .build()
                         )
                         .build()
