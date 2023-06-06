@@ -59,6 +59,7 @@ public class ReservationController {
         System.out.println("################################################################");
         System.out.println("##################"+reservationDTO.getStarttime()+"###########");
         System.out.println("##################"+reservationDTO.getEndtime());
+        System.out.println("#############################"+reservationDTO.getStationName());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         LocalDateTime startTime = LocalDateTime.parse(reservationDTO.getStarttime(), formatter);
@@ -89,9 +90,9 @@ public class ReservationController {
             System.out.println(respone_dto.getName());
             System.out.println(respone_dto.getStation_name());
             System.out.println(respone_dto.getToken());
-            String addr = db_service.privateStation_fillter_get(respone_dto.getStation_name()).getAddr();
-            System.out.println(addr);
-            firebaseCloudMessageService.acceptMessage(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "수락", addr);
+            String address = db_service.privateStation_fillter_get(respone_dto.getStation_name()).getAddr();
+            System.out.println(address);
+            firebaseCloudMessageService.acceptMessage(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "수락", address);
             PrivateStation privateStation = db_service.privateStation_fillter_get(respone_dto.getStation_name());
             for(Reservation_info reservation_info : privateStation.getReservations()){
                 if(reservation_info.getStatNM().equals(respone_dto.getStation_name())){

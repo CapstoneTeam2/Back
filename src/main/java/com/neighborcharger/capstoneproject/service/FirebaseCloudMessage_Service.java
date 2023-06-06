@@ -24,8 +24,12 @@ public class FirebaseCloudMessage_Service {
     // "https://fcm.googleapis.com/v1/projects/fcm-server-b7e93/messages:send";
     private final ObjectMapper objectMapper;
 
+<<<<<<< HEAD
     public void sendMessageTo(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking, String address
     ) throws IOException {
+=======
+    public void sendMessageTo(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking, String address) throws IOException {
+>>>>>>> 7e03355914ea589aac04c6545e2102e7fa9dfa85
         String message = makeMessage(targetToken, title, body, returnToken, startTime, endTime, checking, address);
 
         OkHttpClient client = new OkHttpClient();
@@ -54,7 +58,7 @@ public class FirebaseCloudMessage_Service {
                         ).data(
                                 FcmMessage.Data.builder()
                                         .returnToken(returnToken)
-                                        .startTime(startTime)
+                                        //.startTime(startTime)
                                         .endTime(endTime)
                                         .checking(checking)
                                         .address(address)
