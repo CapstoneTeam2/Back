@@ -37,11 +37,11 @@ public class FcmMessage {
         @Builder
         @AllArgsConstructor
         @Getter
-        public static class Data{
-                private String    returnToken;
-                private String    startTime;
-                private String    endTime;
-                private String    checking;
-                private String    addr;
+        public static class Data {
+                private String returnToken;
+                //private String startTime;
+                private String endTime;
+                private String checking;
+                private String address;
         }
 }
