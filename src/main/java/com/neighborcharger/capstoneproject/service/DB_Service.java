@@ -42,8 +42,10 @@ public class DB_Service {
     @Transactional
     public void updateTotal(PrivateStation privateStation, double cost, double elect, String nickname){
 //        PrivateStation privateStation1 = privateStation;
-        privateStation.setTotalelectric(elect);
-        privateStation.setTotalcost(cost);
+        double originElec = privateStation.getTotalelectric();
+        double originCost = privateStation.getTotalcost();
+        privateStation.setTotalelectric(originElec + elect);
+        privateStation.setTotalcost(originCost + cost);
         for(Reservation_info reservation_info : privateStation.getReservations()){
             if(reservation_info.getReservationperson().equals(nickname)){ // 예약자 찾음
                 reservation_info.setChecking("충전 완료"); // 거래 완료? 충전 완료?
