@@ -36,6 +36,6 @@ public class FcmAcceptMessage {
         private String startTime;
         private String endTime;
         private String checking;
-        private String address;
+        private String addgress;
     }
 }

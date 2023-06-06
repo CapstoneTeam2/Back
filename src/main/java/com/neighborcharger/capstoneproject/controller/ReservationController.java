@@ -72,10 +72,13 @@ public class ReservationController {
         reservation_info.setStart_time(startTime);
         reservation_info.setEnd_time(endTime);
 
+        String addr = db_service.privateStation_fillter_get(reservationDTO.getStationName()).getAddr();
+        System.out.println(addr);
+
         reservationService.Time_Reservation_service(reservation_info, reservationDTO.getStationName());
         userService.insertReservation(reservationDTO.getReservationPerson(), reservation_info);
         System.out.println(reservationDTO.getStationName());
-        firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time().toString(), reservation_info.getEnd_time().toString(), "예약", reservationDTO.getStationName());
+        firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time().toString(), reservation_info.getEnd_time().toString(), "예약", addr);
 
         return "시간 저장 -> 요청 보냄";
     }

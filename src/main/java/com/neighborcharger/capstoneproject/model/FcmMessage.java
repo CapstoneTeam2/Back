@@ -1,14 +1,8 @@
 package com.neighborcharger.capstoneproject.model;
 
-import com.google.api.client.util.Data;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import com.neighborcharger.capstoneproject.model.Reservation_info;
-import javax.persistence.Column;
-import java.util.Map;
 
 @Builder
 @AllArgsConstructor
