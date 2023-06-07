@@ -16,9 +16,10 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
-    @GetMapping("/keyword") // 키워드로 충전소명 뽑기
-    public List<StationDTO> keywordSearch(@RequestParam(value = "keyword") String keyword){
-        List<StationDTO> correctStatList = searchService.searchStatNM(keyword);
+    @GetMapping("/{keyword}") // 키워드로 충전소명 뽑기
+    public List<Object> keywordSearch(@PathVariable String keyword){
+        List<Object> correctStatList = searchService.searchStatNM(keyword);
+        System.out.println(correctStatList);
         return correctStatList;
     }
 

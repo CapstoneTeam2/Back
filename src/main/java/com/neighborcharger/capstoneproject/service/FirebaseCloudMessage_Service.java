@@ -15,6 +15,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 @Component
 @RequiredArgsConstructor
@@ -23,7 +25,17 @@ public class FirebaseCloudMessage_Service {
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/capstoenteam2/messages:send";
     // "https://fcm.googleapis.com/v1/projects/fcm-server-b7e93/messages:send";
     private final ObjectMapper objectMapper;
+    public String formatDate(String input) {
+        LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일 HH:mm");
+        return dateTime.format(formatter);
+    }
 
+    public String EndDate(String input) {
+        LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return dateTime.format(formatter);
+    }
     public void sendMessageTo(String targetToken, String title, String body, String returnToken, String startTime, String endTime, String checking, String address) throws IOException {
         String message = makeMessage(targetToken, title, body, returnToken, startTime, endTime, checking, address);
 
@@ -47,7 +59,7 @@ public class FirebaseCloudMessage_Service {
                         .token(targetToken)
                         .notification(FcmMessage.Notification.builder()
                                 .title(title)
-                                .body(body + " " + startTime + "~" + endTime)
+                                .body(body + " " + formatDate(startTime) + "~" + EndDate(endTime))
                                 .image(null)
                                 .build()
                         ).data(

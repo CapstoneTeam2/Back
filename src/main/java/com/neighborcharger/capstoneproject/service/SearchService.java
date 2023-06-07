@@ -25,23 +25,26 @@ public class SearchService {
     private DB_Repository db_repository;
 
     @Transactional
-    public List<StationDTO> searchStatNM(String keyword){
+    public List<Object> searchStatNM(String keyword){
         List<PrivateStation> privateStatList = db_repository_private.findBystatNMContaining(keyword);
         List<PublicStation> publicStatList = db_repository.findBystatNMContaining(keyword);
-        List<StationDTO> correctStatList = new ArrayList<>();
-
-        if (privateStatList.isEmpty() && publicStatList.isEmpty()){
-            return correctStatList;
-        }
-
-        for (PrivateStation privateStat : privateStatList){
-            correctStatList.add(this.convertPrivateEntityToDTO(privateStat));
-        }
-        for (PublicStation publicStat : publicStatList){
-            correctStatList.add(this.convertPublicEntityToDTO(publicStat));
-        }
-
-        return correctStatList;
+//      List<StationDTO> correctStatList = new ArrayList<>();
+        List<Object> searchStationList = new ArrayList<>();
+        searchStationList.addAll(privateStatList);
+        searchStationList.addAll(publicStatList);
+//        if (privateStatList.isEmpty() && publicStatList.isEmpty()){
+//            return correctStatList;
+//        }
+//
+//        for (PrivateStation privateStat : privateStatList){
+//            correctStatList.add(this.convertPrivateEntityToDTO(privateStat));
+//        }
+//        for (PublicStation publicStat : publicStatList){
+//            correctStatList.add(this.convertPublicEntityToDTO(publicStat));
+//        }
+//
+//        return correctStatList;
+        return searchStationList;
     }
 
     private StationDTO convertPrivateEntityToDTO(PrivateStation privateStation){

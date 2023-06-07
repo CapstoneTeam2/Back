@@ -103,7 +103,7 @@ public class hardwareService {
 
             String Runtime = hours + "시간 " + minutes + "분 " + seconds + "초";
             minutes += hours * 60;
-            chargingCarDTO.setCost(CalCost(Integer.parseInt(privateStation.getPrice()), minutes, privateStation.getChgerType()));
+            chargingCarDTO.setCost((int) CalCost(Integer.parseInt(privateStation.getPrice()), minutes, privateStation.getChgerType()));
             chargingCarDTO.setRuntime(Runtime);
             chargingCarDTO.setUsingElectric(CalElectric(minutes, privateStation.getChgerType()));
 
@@ -122,7 +122,7 @@ public class hardwareService {
         double result = 0;
         if(power.equals("02")) result = ChargingCost * 7 * Min / 60.0;
         else  result =  ChargingCost * 50 * Min / 60.0;
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        DecimalFormat decimalFormat = new DecimalFormat();
         result = Double.parseDouble(decimalFormat.format(result));
         return result;
     }
@@ -196,7 +196,7 @@ public class hardwareService {
                     stationHardWare.setChgerState("충전끝");
                     System.out.println("충전 끝났지로오오오오옹###ㅏㅓ#ㅓ%ㅏ#ㅓ%ㅓ#%ㅏㅓ%");
                     try {
-                        firebaseCloudMessageService.sendEndMessage(reservationPerson.getFirebaseToken(), "이웃집 충전기", "충전이 완료되었습니다.", "끝", String.valueOf(stationHardWare.getCost()), stationHardWare.getRealRunTime());
+                        firebaseCloudMessageService.sendEndMessage(reservationPerson.getFirebaseToken(), "이웃집 충전기", "충전이 완료되었습니다.", "끝", String.valueOf((int)stationHardWare.getCost()), stationHardWare.getRealRunTime());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -211,7 +211,7 @@ public class hardwareService {
 
             Duration duration = Duration.between(startTime, endTime);
             long minutes = duration.toMinutes();
-            timer.schedule(task, 60000 );
+            timer.schedule(task, 60000 * 2 );
 
             stationHardWare.setNickname(reservation_info1.getReservationperson());
             stationHardWare.setCost(0);

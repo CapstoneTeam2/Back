@@ -62,9 +62,9 @@ public class DB_Controller {
         return db_service.privateStaionMy(id);
     }
 
-    @GetMapping("/Private_Station/filtter/{Name}")
-    public PrivateStation privateStation(@PathVariable String Name){
-        return db_service.privateStation_fillter_get(Name);
+    @GetMapping("/Private_Station/filtter/{stationName}")
+    public PrivateStation privateStation(@PathVariable String stationName){
+        return db_service.privateStation_fillter_get(stationName);
     }
 
     @PostMapping("/DB_load")

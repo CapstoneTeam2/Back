@@ -72,14 +72,11 @@ public class ReservationController {
         reservation_info.setStart_time(startTime);
         reservation_info.setEnd_time(endTime);
 
-        String addr = db_service.privateStation_fillter_get(reservationDTO.getStationName()).getAddr();
-        System.out.println(addr);
-
         reservationService.Time_Reservation_service(reservation_info, reservationDTO.getStationName());
         userService.insertReservation(reservationDTO.getReservationPerson(), reservation_info);
         System.out.println(reservationDTO.getStationName());
-        firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time().toString(), reservation_info.getEnd_time().toString(), "예약", addr);
-
+        firebaseCloudMessageService.sendMessageTo(TargetToken, "이웃집 충전기", "충전기 예약이 있어요!", returnToken, reservation_info.getStart_time().toString(), reservation_info.getEnd_time().toString(), "예약", reservation_info.getStatNM());
+        System.out.println(reservation_info.getStart_time());
         return "시간 저장 -> 요청 보냄";
     }
 
@@ -126,15 +123,15 @@ public class ReservationController {
         return result;
     }
 
-    @PostMapping("/PredictCostandTime")
-    public PredictResDTO predictCostandTime(@RequestBody PredictReqDTO predictReqDTO){
-        UserEntity userEntity = userService.User_get(predictReqDTO.getId());
+    @GetMapping("/PredictCostandTime/{wantpercent}/{id}/{stationName}")
+    public PredictResDTO predictCostandTime(@PathVariable String id, @PathVariable String stationName, @PathVariable String wantpercent){
+        UserEntity userEntity = userService.User_get(id);
         String carmodel = userEntity.getCarType();
         double capacity = carservices.findCapacity(carmodel);
-        PrivateStation privateStation = db_service.privateStation_fillter_get(predictReqDTO.getStationName());
-
+        PrivateStation privateStation = db_service.privateStation_fillter_get(stationName);
+        System.out.println(wantpercent);
        PredictResDTO predictResDTO =
-               reservationService.prediccostandtime(capacity, predictReqDTO.getWantpercent(),
+               reservationService.prediccostandtime(capacity, Integer.parseInt(wantpercent),
                        Integer.parseInt(privateStation.getPrice()), privateStation.getChgerType());
         return predictResDTO;
     }
