@@ -34,6 +34,9 @@ public class UserEntity {
     @Column(name = "car_type")
     private String carType;
 
+    @Column
+    private String phone;
+
     @Column(name = "chger_type")
     private String chgerType;
 
@@ -64,7 +67,7 @@ public class UserEntity {
     //일반 로그인 시
     public UserEntity(int userIdx, String nickname,
                       String carType, String chgerType,
-                      String isBusiness, String id, String password) {
+                      String isBusiness, String id, String password, String phone) {
         this.userIdx = userIdx;
         this.nickname = nickname;
         this.carType = carType;
@@ -72,16 +75,18 @@ public class UserEntity {
         this.isBusiness = isBusiness;
         this.id = id;
         this.password = password;
+        this.phone = phone;
     }
 
     public UserEntity(String nickname, String carType,
-                      String chgerType, String id, String password, String firebaseToken) {
+                      String chgerType, String id, String password, String firebaseToken, String phone) {
         this.nickname = nickname;
         this.carType = carType;
         this.chgerType = chgerType;
         this.id = id;
         this.password = password;
         this.firebaseToken = firebaseToken;
+        this.phone = phone;
         //this.kakaoIdx = 0;
     }
 

@@ -24,6 +24,9 @@ public class PrivateStation {
     private String statNM; //충전소명
 
     @Column
+    private String phone; // 충전소 소유자 전화번호
+
+    @Column
     private String ownerName; // 충전소 소유자/대표자명
 
     @Column

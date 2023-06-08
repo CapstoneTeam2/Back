@@ -30,6 +30,9 @@ public class CreateIdUserReqDTO {
     private String id;
 
     @NotNull
+    private String phone;
+
+    @NotNull
     private String password;
 
     @NotNull
