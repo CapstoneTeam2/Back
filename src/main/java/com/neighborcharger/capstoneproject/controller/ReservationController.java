@@ -92,11 +92,12 @@ public class ReservationController {
 
             firebaseCloudMessageService.acceptMessage(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "수락", privateStation.getAddr());
 
-            for(Reservation_info reservation_info : privateStation.getReservations()){
-                if(reservation_info.getStatNM().equals(respone_dto.getStation_name()) &&
-                        reservation_info.getReservationperson().equals(respone_dto.getName())){
+            for(Reservation_info reservation_info : privateStation.getReservations()) {
+                if (reservation_info.getStatNM().equals(respone_dto.getStation_name()) &&
+                        reservation_info.getReservationperson().equals(respone_dto.getName()) &&
+                        reservation_info.getChecking().equals("대기")) {
                     reservationService.updateReservationStat(reservation_info, "수락");
-                    userService.ReservationUpdate(respone_dto.getName(),respone_dto.getStation_name(),"수락");
+                    userService.ReservationUpdate(respone_dto.getName(), respone_dto.getStation_name(), "수락");
                 }
             }
         }
@@ -106,9 +107,10 @@ public class ReservationController {
 
             for(Reservation_info reservation_info : privateStation.getReservations()){
                 if(reservation_info.getStatNM().equals(respone_dto.getStation_name()) &&
-                        reservation_info.getReservationperson().equals(respone_dto.getName())){
+                        reservation_info.getReservationperson().equals(respone_dto.getName()) &&
+                        reservation_info.getChecking().equals("대기")) {
                     reservationService.updateReservationStat(reservation_info, "거절");
-                    userService.ReservationUpdate(respone_dto.getName(),respone_dto.getStation_name(),"거절");
+                    userService.ReservationUpdate(respone_dto.getName(), respone_dto.getStation_name(), "거절");
                 }
             }
         }
