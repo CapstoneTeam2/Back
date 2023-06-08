@@ -143,4 +143,7 @@ public class DB_Service {
     }
 
 
+    public PrivateStation privateStationGetUsingAddr(String station_name) {
+        return db_repository_private.findByaddr(station_name).orElseGet(PrivateStation::new);
+    }
 }

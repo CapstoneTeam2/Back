@@ -13,7 +13,7 @@ spring:
 
     #url : jdbc:mysql://neighborcharger.cmobwlvkrcpm.ap-northeast-2.rds.amazonaws.com:3306/neighborcharger?serverTimezone=Asia/Seoul
     #url: jdbc:mysql://localhost:3306/team?serverTimezone=Asia/Seoul
-    url : jdbc:mysql://localhost:3306/team?serverTimezone=Asia/Seoul
+    url : jdbc:mysql://115.85.183.243:3306/team?serverTimezone=Asia/Seoul
     #    url: jdbc:mysql://localhost:3306/team?serverTimezone=Asia/Seoul
 
     #    username: cho
@@ -28,7 +28,7 @@ spring:
     # url: jdbc:mysql://localhost:3306/team?serverTimezone=Asia/Seoul
     #    username: cho
     #    password: hee6455
-    username : cho
+    username : spring
     password : hee6455
 
     # url: jdbc:mysql://neighborcharger.cmobwlvkrcpm.ap-northeast-2.rds.amazonaws.com:3306/neighborcharger?serverTimezone=Asia/Seoul
@@ -51,7 +51,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false

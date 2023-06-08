@@ -17,21 +17,26 @@ import java.util.List;
 
 @Service
 public class SearchService {
-
     @Autowired
     private DB_Repository_private db_repository_private;
-
     @Autowired
     private DB_Repository db_repository;
-
     @Transactional
     public List<Object> searchStatNM(String keyword){
         List<PrivateStation> privateStatList = db_repository_private.findBystatNMContaining(keyword);
         List<PublicStation> publicStatList = db_repository.findBystatNMContaining(keyword);
+
+        for(PrivateStation privateStation : privateStatList)
+            System.out.println(privateStation);
+
+        for(PublicStation publicStation : publicStatList)
+            System.out.println(publicStation);
+
 //      List<StationDTO> correctStatList = new ArrayList<>();
         List<Object> searchStationList = new ArrayList<>();
         searchStationList.addAll(privateStatList);
         searchStationList.addAll(publicStatList);
+
 //        if (privateStatList.isEmpty() && publicStatList.isEmpty()){
 //            return correctStatList;
 //        }
@@ -44,6 +49,8 @@ public class SearchService {
 //        }
 //
 //        return correctStatList;
+
+        System.out.println(searchStationList);
         return searchStationList;
     }
 

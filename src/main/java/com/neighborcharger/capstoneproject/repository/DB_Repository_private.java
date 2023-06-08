@@ -12,7 +12,7 @@ public interface DB_Repository_private extends JpaRepository<PrivateStation, Int
     Optional<PrivateStation> findBystatNM(String statNM);
     Optional<PrivateStation> findByownerName(String ownerName);
     Optional<PrivateStation> findByfirebaseToken(String firebaseToken);
-
+    Optional<PrivateStation> findByaddr(String addr);
     List<PrivateStation> findBystatNMContaining(String keyword);
 
 

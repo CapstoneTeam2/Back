@@ -57,18 +57,26 @@ public class Reservation_Service {
 
     @Transactional
     public void updateReservationStat(Reservation_info reservation_info, String resp){
-        Reservation_info reservationInfo = reservation_info;
-        reservationInfo.setChecking(resp);
-
+        System.out.println("log############################################"+resp);
+        Reservation_info reservationInfo_get = new Reservation_info();
+        PrivateStation privateStation = db_repository_private.findBystatNM(reservation_info.getStatNM()).orElseGet(PrivateStation::new);
+        for(Reservation_info reservation_info1 : privateStation.getReservations()){
+            if(reservation_info1.getStatNM().equals(reservation_info.getStatNM())){
+                reservationInfo_get = reservation_info1;
+                break;
+            }
+        }
+        reservationInfo_get.setChecking(resp);
     }
 
     public List<Pair<String, String>> reservationLists(String stationName) {
         PrivateStation privateStation = db_repository_private.findBystatNM(stationName).orElseGet(PrivateStation::new);
         List<Pair<String, String>> list = new ArrayList<>();
         for(Reservation_info reservationInfo : privateStation.getReservations()){
-            Pair<String, String> pair = Pair.of(reservationInfo.getStart_time().toString(), reservationInfo.getEnd_time().toString());
-
-            list.add(pair);
+            if(reservationInfo.getChecking().equals("수락") || reservationInfo.getChecking().equals("대기")) {
+                Pair<String, String> pair = Pair.of(reservationInfo.getStart_time().toString(), reservationInfo.getEnd_time().toString());
+                list.add(pair);
+            }
         }
         return list;
     }

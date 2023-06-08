@@ -87,12 +87,14 @@ public class ReservationController {
             System.out.println(respone_dto.getName());
             System.out.println(respone_dto.getStation_name());
             System.out.println(respone_dto.getToken());
-            String address = db_service.privateStation_fillter_get(respone_dto.getStation_name()).getAddr();
-            System.out.println(address);
-            firebaseCloudMessageService.acceptMessage(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "수락", address);
+            System.out.println(respone_dto.getName());
             PrivateStation privateStation = db_service.privateStation_fillter_get(respone_dto.getStation_name());
+
+            firebaseCloudMessageService.acceptMessage(respone_dto.getToken(), "이웃집 충전기", "요청이 수락되었어요", "수락", privateStation.getAddr());
+
             for(Reservation_info reservation_info : privateStation.getReservations()){
-                if(reservation_info.getStatNM().equals(respone_dto.getStation_name())){
+                if(reservation_info.getStatNM().equals(respone_dto.getStation_name()) &&
+                        reservation_info.getReservationperson().equals(respone_dto.getName())){
                     reservationService.updateReservationStat(reservation_info, "수락");
                     userService.ReservationUpdate(respone_dto.getName(),respone_dto.getStation_name(),"수락");
                 }
@@ -101,8 +103,10 @@ public class ReservationController {
         else {
             firebaseCloudMessageService.sendMessageTo2(respone_dto.getToken(), "이웃집 충전기", "요청이 거절되었어요", "거절");
             PrivateStation privateStation = db_service.privateStation_fillter_get(respone_dto.getStation_name());
+
             for(Reservation_info reservation_info : privateStation.getReservations()){
-                if(reservation_info.getStatNM().equals(respone_dto.getStation_name())){
+                if(reservation_info.getStatNM().equals(respone_dto.getStation_name()) &&
+                        reservation_info.getReservationperson().equals(respone_dto.getName())){
                     reservationService.updateReservationStat(reservation_info, "거절");
                     userService.ReservationUpdate(respone_dto.getName(),respone_dto.getStation_name(),"거절");
                 }

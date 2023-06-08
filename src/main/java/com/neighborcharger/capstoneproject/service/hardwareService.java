@@ -144,12 +144,13 @@ public class hardwareService {
 
         for(Reservation_info reservation_info : privateStation.getReservations()){
             boolean isBetween = reservation_info.getStart_time().isBefore(ldt) && ldt.isBefore(reservation_info.getEnd_time());
-            if (isBetween) {
+            if (isBetween && reservation_info.getChecking().equals("수락")) {
                 reservation_info1 = reservation_info;
                 break;
             }
         }
-
+        if(reservation_info1.getStatNM() == null)
+            return null;
         UserEntity reservationPerson = reservationUserRepository.findBynickname(reservation_info1.getReservationperson()).orElse(null);
 
         if (reservation_info1.getStationHardWare() == null){ //처음 qr 찍었을 경우
@@ -158,13 +159,12 @@ public class hardwareService {
             stationHardWare.setChgerState("충전중");
             stationHardWare.setRealStartTime(ldt);
             System.out.println(reservation_info1.getReservationperson());
-            System.out.println(reservationPerson.getNickname());
+            //System.out.println(reservationPerson.getNickname());
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
 //                @Transactional
                 public void run() {
-
                     //RealEndTime 업데이트
                     LocalDateTime now = LocalDateTime.now();
                     stationHardWare.setRealEndTime(now);
