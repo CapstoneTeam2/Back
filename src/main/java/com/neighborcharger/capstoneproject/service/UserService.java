@@ -123,7 +123,8 @@ public class UserService {
                 createIdUserReqDTO.getChgerType(),
                 createIdUserReqDTO.getId(),
                 createIdUserReqDTO.getPassword(),
-                createIdUserReqDTO.getFirebaseToken()
+                createIdUserReqDTO.getFirebaseToken(),
+                createIdUserReqDTO.getPhone()
         );
 
 
