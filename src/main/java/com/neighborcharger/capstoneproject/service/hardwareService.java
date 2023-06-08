@@ -116,14 +116,14 @@ public class hardwareService {
         }
     }
 
-    public double CalCost(int ChargingCost, long Min, String power){
+    public int CalCost(int ChargingCost, long Min, String power){
         System.out.println(ChargingCost);
         System.out.println(power);
-        double result = 0;
-        if(power.equals("02")) result = ChargingCost * 7 * Min / 60.0;
-        else  result =  ChargingCost * 50 * Min / 60.0;
+        int result = 0;
+        if(power.equals("02")) result = (int) (ChargingCost * 7 * Min / 60.0);
+        else  result = (int) (ChargingCost * 50 * Min / 60.0);
         DecimalFormat decimalFormat = new DecimalFormat();
-        result = Double.parseDouble(decimalFormat.format(result));
+        result = Integer.parseInt(decimalFormat.format(result));
         return result;
     }
     public double CalElectric(long Min, String power){
@@ -211,7 +211,7 @@ public class hardwareService {
 
             Duration duration = Duration.between(startTime, endTime);
             long minutes = duration.toMinutes();
-            timer.schedule(task, 60000 * 2 );
+            timer.schedule(task, 60000 * minutes );
 
             stationHardWare.setNickname(reservation_info1.getReservationperson());
             stationHardWare.setCost(0);
