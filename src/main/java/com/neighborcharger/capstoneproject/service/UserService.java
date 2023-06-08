@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.neighborcharger.capstoneproject.model.base.BaseResponseStatus.*;
@@ -123,8 +124,7 @@ public class UserService {
                 createIdUserReqDTO.getChgerType(),
                 createIdUserReqDTO.getId(),
                 createIdUserReqDTO.getPassword(),
-                createIdUserReqDTO.getFirebaseToken(),
-                createIdUserReqDTO.getPhone()
+                createIdUserReqDTO.getFirebaseToken()
         );
 
 
@@ -237,7 +237,14 @@ public class UserService {
 
     public List<Reservation_info> getReservation(String id){
         UserEntity userEntity = reservationUserRepository.findByid(id).orElseGet(UserEntity::new);
-        return userEntity.getReservations();
+        List<Reservation_info> reservationinfoList = new ArrayList<>();
+
+        for (Reservation_info reservation_info : userEntity.getReservations()){
+            if(!reservation_info.getChecking().equals("거절")){
+                reservationinfoList.add(reservation_info);
+            }
+        }
+        return reservationinfoList;
     }
 
     @Transactional
