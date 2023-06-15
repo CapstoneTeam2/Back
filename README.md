@@ -33,7 +33,7 @@
 
 <br/>
 
-**이웃집 충전기**를 통해 ~
+**이웃집 충전기**를 통해 부족한 충전소 걱정 없이 전기차 충전하세요 ~
 
 <br/>
 
@@ -49,7 +49,8 @@
 - Frontend : Flutter
 - Backend : Java, Spring Boot
 - MySQL
-- 
+- Naver Cloud Platform
+- Firebase
 
 <br/>
 
