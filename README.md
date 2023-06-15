@@ -15,7 +15,7 @@
 
 자신에게 전기차 충전기가 있다면, **이웃집 충전기**를 통해 자신의 충전소를 등록하고 대여해주세요 !
 
-<br/
+<br/>
 
 이웃집 충전기에서는 공공데이터포털의 API를 통해 신뢰할 수 있는 모든 전기차 공용 충전소 정보를 제공합니다. 
 
@@ -64,37 +64,45 @@
 ![image](https://github.com/CapstoneTeam2/Back/assets/63294503/2082d343-5b0a-4702-b065-a1393bc18c62)
 
 <br/>
-<br/>
+
 ### 👍 충전소 추천 기능 (가격순/평점순/거리순)
-<br/>
+
 ![image](https://github.com/CapstoneTeam2/Back/assets/63294503/b7cbb4d1-9ed6-4732-a6bc-5bdd96010fc5)
 
 <br/>
-<br/>
-### 🧔 전기차 충전소 소유자(관리자) - 개인 충전소 등록 및 관리
 
-충전소 등록, 내 충전소 정보에서 수입과 사용전력량 확인 가능 
-<br/>
+### 🧔 전기차 충전소 소유자(관리자) - 개인 충전소 등록 및 관리
+개인별 자신의 충전소 등록
+
+내 충전소 정보에서 수입과 사용전력량 확인 가능 
+
 ![image](https://github.com/CapstoneTeam2/Back/assets/63294503/aa746e0a-12ba-4214-a626-65ee369baff1)
 
 <br/>
-<br/>
-### 👱 전기차 소유자(이용자) - 충전 시간 예약
 
+### 👱 전기차 소유자(이용자) - 충전 시간 예약
 차종별 예상 충전 시간 확인 가능 ( 현재 퍼센트와 목표 퍼센트 입력 시 자동 계산 )
 
 충전소별 시간 예약, 충전소별 QR로 충전 시작 기능
 
 <br/>
-![image](https://github.com/CapstoneTeam2/Back/assets/63294503/33508339-0330-498c-a8fa-df64afb75307)
-<br/>
-<br/>
-### 👱 전기차 소유자(이용자) - 실시간 충전 관련 정보 제공
 
+![image](https://github.com/CapstoneTeam2/Back/assets/63294503/33508339-0330-498c-a8fa-df64afb75307)
+
+<br/>
+
+### 👱 전기차 소유자(이용자) - 실시간 충전 관련 정보 제공
 충전 중일 경우, 실시간 
-충전 가격, 시간 정보 등 제공
+충전 가격/시간 정보 등 제공
 
 <br/>
 
 ![image](https://github.com/CapstoneTeam2/Back/assets/63294503/68a08e56-0121-4e81-b223-daf9e83fe678)
 <br/>
+
+
+----
+# 🧑‍🤝‍🧑 팀원
+
+- Frontend Developer : [양혜준](https://github.com/YangHyeJun)
+- Backend Developer : [조범희](https://github.com/ChoBeomHee), [이나연](https://github.com/nayeone)
